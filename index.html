@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Winter Arc</title>
+<meta name="description" content="Adaptive winter training plan.">
+<meta name="theme-color" content="#d6f0ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0d28" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Winter Arc">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+@font-face{font-family:"Chakra Petch";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/ChakraPetch-SemiBold.woff2) format("woff2")}
+@font-face{font-family:"Chakra Petch";font-style:italic;font-weight:600;font-display:swap;src:url(fonts/ChakraPetch-SemiBoldItalic.woff2) format("woff2")}
+@font-face{font-family:"Chakra Petch";font-style:italic;font-weight:700;font-display:swap;src:url(fonts/ChakraPetch-BoldItalic.woff2) format("woff2")}
+@font-face{font-family:"Dela Gothic One";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/DelaGothicOne-Regular.woff2) format("woff2")}
+@font-face{font-family:"M PLUS 1p";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/MPLUS1p-Regular.woff2) format("woff2")}
+@font-face{font-family:"M PLUS 1p";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/MPLUS1p-Medium.woff2) format("woff2")}
+@font-face{font-family:"M PLUS 1p";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/MPLUS1p-Bold.woff2) format("woff2")}
+@font-face{font-family:"M PLUS 1p";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/MPLUS1p-ExtraBold.woff2) format("woff2")}
+</style>
+<style>
+/* Layout: a colour-spread manga page on a phone. A title-card hero, a full-bleed rival band that breaks the column, then one calm quest sheet. Ink outlines, flat fills, no blur. */
+:root{
+  color-scheme: light;
+  --page:#d6f0ff; --paper:#fffaf0; --paper2:#ffeeb0; --raise:#ffffff; --line:#15102e; --ctl:#15102e; --rule:#e4dbc4; --fg:#15102e; --muted:#4f4a72; --link:#1746d1;
+  --ink:#15102e; --onb:#15102e; --white:#ffffff;
+  --yellow:#ffd60a; --orange:#ff7a1a; --sky:#27b3ff; --royal:#1746d1; --pink:#ff5fa0; --green:#2fd98a; --violet:#a98bff; --red:#ef3b2d;
+  --dsa:#27b3ff; --prob:#ff5fa0; --build:#2fd98a; --trade:#a98bff; --hw:#c8f03c;
+  --display:"Dela Gothic One","Arial Black",Impact,sans-serif;
+  --body:"M PLUS 1p","Hiragino Sans","Segoe UI",system-ui,sans-serif;
+  --hud:"Chakra Petch","Arial Narrow","Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--page)}
+.app{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+a{color:var(--link);font-weight:700}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+
+/* ---------- hero ---------- */
+.splashw{margin-top:14px;filter:drop-shadow(6px 6px 0 var(--line))}
+.splashc{background:var(--ink);padding:3px;clip-path:polygon(0 0,calc(100% - 30px) 0,100% 30px,100% 100%,30px 100%,0 calc(100% - 30px))}
+.splash{position:relative;isolation:isolate;overflow:hidden;background:var(--sky);color:var(--onb);
+  clip-path:polygon(0 0,calc(100% - 29px) 0,100% 29px,100% 100%,29px 100%,0 calc(100% - 29px));
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 6px;padding:14px 16px 16px}
+.splash::before{content:"";position:absolute;inset:0;z-index:-2;
+  background:repeating-conic-gradient(from 3deg at 84% 43%,var(--white) 0 1.2deg,transparent 1.2deg 6.5deg);opacity:.6;
+  -webkit-mask-image:radial-gradient(circle at 84% 43%,transparent 0 60px,#000 210px);mask-image:radial-gradient(circle at 84% 43%,transparent 0 60px,#000 210px)}
+.eyebrow{display:inline-block;background:var(--white);color:var(--onb);border:3px solid var(--ink);padding:0 10px 1px;font-family:var(--hud);font-style:italic;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.03em;transform:skewX(-9deg)}
+.eyebrow>span{display:inline-block;transform:skewX(9deg)}
+.spl-l{display:flex;flex-direction:column;gap:12px;min-width:0;align-items:flex-start}
+.spl-l h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,10.2vw,78px);line-height:.9;text-transform:uppercase;color:var(--yellow);
+  -webkit-text-stroke:8px var(--ink);paint-order:stroke fill;text-shadow:5px 6px 0 var(--ink);transform:rotate(-5deg) skewX(-7deg);transform-origin:left center;margin:6px 0 8px 4px}
+.spl-l h1 em{font-style:normal;color:var(--orange)}
+.spl-r{position:relative;width:104px;height:128px;align-self:center}
+#aura{position:absolute;inset:0;width:100%;height:100%}
+.emblem{position:absolute;left:50%;bottom:10px;width:54px;height:54px;margin-left:-27px;background:var(--white);border:3px solid var(--ink);transform:rotate(45deg);display:grid;place-items:center;box-shadow:3px 3px 0 var(--ink)}
+.emblem b{transform:rotate(-45deg);font-family:var(--display);font-weight:400;font-size:28px;line-height:1;color:var(--onb)}
+.power{grid-column:1/-1;background:var(--ink);color:var(--white);margin:12px -16px -16px;padding:9px 20px 12px 36px;display:flex;flex-direction:column;gap:6px}
+.powlab{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:var(--hud);font-style:italic;font-weight:700;font-size:15px;text-transform:uppercase}
+.meter{height:18px;border:3px solid var(--white);transform:skewX(-14deg);overflow:hidden;margin-inline:3px}
+.meter i{display:block;height:100%;background:repeating-linear-gradient(-46deg,var(--yellow) 0 9px,var(--orange) 9px 18px)}
+.loadrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;min-height:36px;font-family:var(--hud);font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em}
+.load{position:relative;background:var(--yellow);color:var(--onb);border:0;padding:5px 14px 6px;min-height:36px;transform:skewX(-9deg);font-family:var(--hud);font-style:italic;font-weight:700;font-size:14px;text-transform:uppercase}
+.load::before{content:"";position:absolute;inset:-6px -4px}
+.load>span{display:inline-block;transform:skewX(9deg)}
+.compact .splash{padding:10px 14px 16px}
+.compact .eyebrow,.compact #aura,.compact .loadrow{display:none}
+.compact .spl-l{gap:0}
+.compact .spl-l h1{font-size:25px;margin:4px 0 2px 2px;-webkit-text-stroke-width:5px;text-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg) skewX(-7deg)}
+.compact .spl-r{width:46px;height:42px}
+.compact .emblem{width:32px;height:32px;margin-left:-16px;bottom:5px;box-shadow:2px 2px 0 var(--ink)}
+.compact .emblem b{font-size:17px}
+.compact .power{margin-top:8px}
+
+/* ---------- tabs ---------- */
+.tabs{position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;display:flex;gap:6px;padding:12px 3px 13px;background:var(--page)}
+.tabs button{flex:1 1 auto;min-width:0;min-height:44px;transform:skewX(-9deg);background:var(--raise);color:var(--fg);border:3px solid var(--line);padding:5px 3px 6px;font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase}
+.tabs button>span{display:inline-block;transform:skewX(9deg)}
+.tabs button[aria-selected="true"]{background:var(--yellow);color:var(--onb);border-color:var(--ink);box-shadow:0 5px 0 var(--line)}
+
+main{display:flex;flex-direction:column;gap:22px;min-width:0;padding-top:4px}
+
+/* ---------- panels ---------- */
+.pw{position:relative;min-width:0}
+.pc{background:var(--line);padding:3px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.pin{background:var(--paper);clip-path:polygon(0 0,calc(100% - 17px) 0,100% 17px,100% 100%,17px 100%,0 calc(100% - 17px));padding:22px 14px 14px;display:flex;flex-direction:column;min-width:0}
+.pw>.lab{position:absolute;top:-14px;left:10px;z-index:2}
+.lab{display:inline-block;margin:0;transform:skewX(-9deg) rotate(-1.5deg);background:var(--c,var(--yellow));color:var(--onb);border:3px solid var(--ink);padding:1px 12px 3px;font-family:var(--display);font-weight:400;font-size:15px;line-height:1.35}
+.lab>span{display:inline-block;transform:skewX(9deg)}
+.sub{font-family:var(--hud);font-style:italic;font-weight:600;font-size:13.5px;color:var(--muted);margin:0 0 6px}
+[data-t="dsa"]{--c:var(--dsa)} [data-t="prob"]{--c:var(--prob)} [data-t="trade"]{--c:var(--trade)} [data-t="build"]{--c:var(--build)} [data-t="hw"]{--c:var(--hw)} [data-t="admin"]{--c:var(--orange)}
+.txt{font-size:14.5px;max-width:64ch}
+.muted{color:var(--muted)}
+
+/* ---------- coach and deadlines ---------- */
+.top{display:flex;flex-direction:column;gap:12px}
+.coach{display:flex;gap:14px;align-items:flex-start}
+.sensei{flex:0 0 auto;width:48px;height:48px;border-radius:50%;background:var(--yellow);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--line);display:grid;place-items:center;font-family:var(--display);font-size:23px;line-height:1;color:var(--onb);transform:rotate(-6deg)}
+.balloon{position:relative;flex:1;min-width:0;background:var(--paper);border:3px solid var(--line);border-radius:20px;padding:8px 14px 10px;font-weight:500;font-size:15px;line-height:1.4}
+.balloon::before{content:"";position:absolute;top:15px;left:-11px;width:17px;height:17px;background:var(--paper);border-left:3px solid var(--line);border-bottom:3px solid var(--line);transform:rotate(45deg) skewX(14deg)}
+.balloon .who{display:block;font-family:var(--hud);font-style:italic;font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.balloon small{display:block;font-size:13.5px;color:var(--muted);margin-top:3px;font-weight:400}
+.dl{background:var(--orange);color:var(--onb);border:3px solid var(--ink)}
+.dl>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:6px 40px 7px 8px;min-height:52px;position:relative}
+.dl>summary::-webkit-details-marker{display:none}
+.dl>summary::after{content:"";position:absolute;right:16px;top:19px;width:9px;height:9px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.dl[open]>summary::after{transform:rotate(-135deg);top:24px}
+.dln{flex:0 0 auto;min-width:34px;height:34px;display:grid;place-items:center;background:var(--white);border:3px solid var(--ink);transform:skewX(-9deg);font-family:var(--display);font-size:17px;line-height:1}
+.dln.hot{background:var(--red);color:var(--white)}
+.dlt{display:flex;flex-direction:column;min-width:0;font-weight:800;font-size:15px;line-height:1.25}
+.dlt small{font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.03em}
+.dlb{background:var(--paper);color:var(--fg);border-top:3px solid var(--ink);padding:0 4px 4px 12px}
+
+/* ---------- rival band ---------- */
+.vs{position:relative;isolation:isolate;margin:20px -16px 4px;padding:9px 16px 11px 108px;min-height:92px;background:var(--red);color:var(--onb);border-block:3px solid var(--ink);display:flex;flex-direction:column;gap:5px;justify-content:center}
+.vs::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle,var(--ink) 1.7px,transparent 2.1px) 0 0/9px 9px;opacity:.2;-webkit-mask-image:linear-gradient(250deg,#000,transparent 50%);mask-image:linear-gradient(250deg,#000,transparent 50%)}
+.mask{position:absolute;left:14px;top:-24px;width:82px;height:94px}
+.mask .mi{fill:var(--ink)} .mask .mf{fill:var(--white)} .mask .me{fill:var(--yellow);stroke:var(--ink);stroke-width:2;stroke-linejoin:round} .mask .mm{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.mask .my{fill:var(--yellow)} .mask .mv{font-family:var(--display);font-size:21px;fill:var(--ink)} .mask .mn{font-family:var(--hud);font-weight:700;font-style:italic;font-size:9px;fill:var(--ink)}
+.vsl{font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.03em}
+.rname{font-family:var(--display);font-size:clamp(19px,5.6vw,30px);line-height:1.12;letter-spacing:.03em;color:var(--white);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;overflow-wrap:anywhere}
+.hp{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:2px 3px 0}
+.hp i{height:14px;border:2.5px solid var(--ink);background:var(--yellow);transform:skewX(-14deg)}
+.hp i.off{background:var(--ink);opacity:.5}
+.hpn{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:var(--hud);font-style:italic;font-weight:700;font-size:14px;text-transform:uppercase;color:var(--white);text-shadow:1.5px 1.5px 0 var(--ink)}
+.stamp{position:absolute;right:12px;top:-14px;transform:rotate(6deg);border:3px solid var(--ink);background:var(--green);color:var(--onb);font-family:var(--display);font-size:14px;padding:0 10px 2px}
+
+/* ---------- quest sheet ---------- */
+.grp{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 0 2px}
+.pin>.grp:first-child,.sub+.grp{padding-top:2px}
+.gchip{transform:skewX(-9deg);background:var(--c,var(--raise));color:var(--onb);border:3px solid var(--ink);padding:0 10px 2px;font-family:var(--display);font-size:13.5px;line-height:1.5}
+.gchip.plain{background:var(--raise);color:var(--fg);border-color:var(--ctl)}
+.gchip>span{display:inline-block;transform:skewX(9deg)}
+.gsub{font-family:var(--hud);font-style:italic;font-weight:600;font-size:13.5px;color:var(--muted)}
+.glab{font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:14px 0 2px}
+.q{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:start;border-top:2px solid var(--rule);min-width:0}
+.grp+.q,.glab+.q,.dlb>.q:first-child{border-top:0}
+.qtick{display:flex;gap:12px;align-items:flex-start;text-align:left;background:none;border:0;padding:11px 0;min-height:52px;min-width:0}
+.chk{flex:0 0 auto;width:28px;height:28px;border:3px solid var(--ctl);background:var(--raise);position:relative;margin-top:1px}
+.qtick[aria-pressed="true"] .chk{background:var(--c,var(--yellow));border-color:var(--ink);transform:rotate(-7deg)}
+.qtick[aria-pressed="true"] .chk::after{content:"";position:absolute;left:7px;top:0;width:8px;height:15px;border:solid var(--onb);border-width:0 4px 4px 0;transform:rotate(42deg)}
+.qtx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.qt{font-weight:700;font-size:15.5px;line-height:1.3;overflow-wrap:anywhere}
+.q.done .qt{color:var(--muted);font-weight:500}
+.q.done .qm{display:none}
+.q.done .qtick{min-height:46px;padding:8px 0}
+.qm{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.xp{font-family:var(--hud);font-style:italic;font-weight:700;font-size:13.5px;color:var(--muted)}
+.tag{font-family:var(--hud);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;border:2px solid var(--line);padding:0 6px;background:var(--paper2);color:var(--fg);line-height:18px}
+.tag.hot{background:var(--red);color:var(--white);border-color:var(--ink)} .tag.soon{background:var(--orange);color:var(--onb);border-color:var(--ink)} .tag.good{background:var(--green);color:var(--onb);border-color:var(--ink)} .tag.warn{background:var(--yellow);color:var(--onb);border-color:var(--ink)}
+.qx{width:44px;height:50px;background:none;border:0;position:relative}
+.qx::after{content:"";position:absolute;left:16px;top:17px;width:9px;height:9px;border-right:3px solid var(--muted);border-bottom:3px solid var(--muted);transform:rotate(45deg)}
+.qx[aria-expanded="true"]::after{transform:rotate(-135deg);top:22px}
+.qd{grid-column:1/-1;padding:0 8px 12px 40px;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.qd p{max-width:60ch}
+.qk{grid-column:1/-1;padding:0 0 10px 40px}
+.links{display:flex;gap:14px;flex-wrap:wrap}
+.ghost{background:var(--paper2);color:var(--fg);border:2px solid var(--line);min-height:36px;padding:2px 10px;font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase}
+.morebtn{margin-top:14px;min-height:46px;background:var(--raise);color:var(--fg);border:3px solid var(--ctl);font-family:var(--hud);font-style:italic;font-weight:700;font-size:14px;text-transform:uppercase}
+details.donebox>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.dailies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+.dbtn{position:relative;min-height:66px;background:var(--raise);color:var(--fg);border:3px solid var(--ctl);padding:8px 8px 9px;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:0}
+.dbtn b{font-size:14px;line-height:1.2}
+.dbtn span{font-size:12.5px;line-height:1.3;color:var(--muted)}
+.dbtn[aria-pressed="true"]{background:var(--yellow);border-color:var(--ink);color:var(--onb)}
+.dbtn[aria-pressed="true"] span{color:var(--onb)}
+.dbtn[aria-pressed="true"] b{padding-right:20px}
+.dbtn[aria-pressed="true"]::after{content:"";position:absolute;right:10px;top:6px;width:7px;height:14px;border:solid var(--onb);border-width:0 4px 4px 0;transform:rotate(42deg)}
+input,select,textarea{font-size:16px}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{touch-action:manipulation}
+textarea{font:inherit;font-family:var(--hud);font-weight:600;color:var(--fg);background:var(--raise);border:3px solid var(--ctl);border-radius:0;padding:7px 8px;width:100%;min-height:88px;resize:vertical}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn.ghost{background:var(--raise);color:var(--fg);border:3px solid var(--ctl);min-height:44px;padding:5px 16px 7px;font-family:var(--display);font-style:normal;font-weight:400;font-size:14px;text-transform:none}
+.syncdot{display:inline-block;width:10px;height:10px;border:2px solid var(--ink);margin-right:6px;vertical-align:-1px;transform:rotate(45deg)}
+.syncdot.ok{background:var(--green)} .syncdot.wait{background:var(--yellow)} .syncdot.bad{background:var(--red)} .syncdot.off{background:transparent}
+.smsg{margin:10px 0 0;font-size:13.5px;line-height:1.45}
+.smsg.bad{color:var(--red)}
+.voices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.uiline{margin:10px 0 0;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.uiline b{color:var(--fg)}
+.forms{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.forms li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:3px solid var(--rule);font-size:14.5px}
+.forms li i{width:18px;height:18px;border:2px solid var(--ink);transform:rotate(45deg) scale(.8)}
+.forms li span{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.forms li.got{opacity:.72}
+.forms li.cur{border-color:var(--ink);background:var(--yellow);color:var(--onb)}
+.forms li.cur span{color:var(--onb)}
+.zrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:14px}
+.zrow input{width:86px}
+input,select{font:inherit;font-family:var(--hud);font-weight:600;color:var(--fg);background:var(--raise);border:3px solid var(--ctl);border-radius:0;padding:7px 8px;min-height:44px;min-width:0;width:100%}
+.field{display:flex;flex-direction:column;gap:3px;font-family:var(--hud);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);min-width:0;flex:1 1 128px}
+.form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:10px}
+.btn{min-height:44px;background:var(--yellow);color:var(--onb);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--line);font-family:var(--display);font-size:14px;padding:5px 16px 7px;transform:skewX(-9deg)}
+.btn:active{box-shadow:none;transform:skewX(-9deg) translate(3px,3px)}
+
+/* ---------- plan ---------- */
+.calh,.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.calh span{text-align:center;font-family:var(--hud);font-weight:600;font-size:12px;text-transform:uppercase;color:var(--muted)}
+.cal{margin:4px 0 10px}
+.dchip{min-width:0;min-height:52px;background:var(--raise);color:var(--fg);border:3px solid var(--ctl);padding:2px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--hud);font-weight:700;font-size:11px;text-transform:uppercase;line-height:1.15}
+.dchip b{font-family:var(--display);font-weight:400;font-size:16px;line-height:1.2}
+.dchip[data-k="half"],.dchip[data-k="light"]{background:var(--paper2)}
+.dchip[data-k="max"]{background:var(--yellow);color:var(--onb)}
+.dchip[data-k="rest"]{background:transparent;border-style:dashed;color:var(--muted)}
+.dchip.today{outline:3px solid var(--orange);outline-offset:1px}
+.steps{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px}
+.step{display:flex;flex-direction:column;gap:4px;font-family:var(--hud);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+.stepc{display:flex;align-items:stretch}
+.stepc button{width:44px;height:44px;background:var(--raise);color:var(--fg);border:3px solid var(--ctl);font-family:var(--display);font-size:18px;line-height:1}
+.stepc b{min-width:96px;display:grid;place-items:center;border-block:3px solid var(--ctl);font-family:var(--display);font-weight:400;font-size:15px;color:var(--fg);text-transform:none;letter-spacing:0}
+.bar{height:14px;border:3px solid var(--line);transform:skewX(-14deg);overflow:hidden;margin:2px 4px 8px}
+.bar i{display:block;height:100%;background:var(--c,var(--yellow))}
+.num{font-family:var(--hud);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- events ---------- */
+.ev{display:grid;grid-template-columns:minmax(0,1fr) 44px;border-top:2px solid var(--rule);padding:12px 0 10px;min-width:0}
+.txt+.ev{border-top:0}
+.evm{display:flex;flex-direction:column;gap:5px;min-width:0}
+.evtop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.evd{transform:skewX(-9deg);background:var(--raise);color:var(--fg);border:3px solid var(--ctl);padding:0 10px 2px;font-family:var(--display);font-size:14px;line-height:1.5}
+.evd.go{background:var(--yellow);color:var(--onb);border-color:var(--ink)}
+.ev h3{font-size:17.5px;font-weight:800;line-height:1.25}
+.evw{font-family:var(--hud);font-weight:600;font-size:13.5px;color:var(--muted)}
+.do{font-weight:700;font-size:14.5px;max-width:60ch}
+.evx{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;padding-top:8px;font-size:14px}
+.evx p{max-width:60ch}
+.evf{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.evf select{width:auto}
+
+/* ---------- stats ---------- */
+.weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:6px}
+.wk{min-width:0;color:var(--fg);border:3px solid var(--line);text-align:center;font-family:var(--hud);font-weight:700;font-size:11.5px;text-transform:uppercase;padding:3px 0 4px;background:var(--raise);line-height:1.25}
+.wk b{display:block;font-family:var(--display);font-weight:400;font-size:17px}
+.wk.won{background:var(--green);color:var(--onb);border-color:var(--ink)} .wk.now{background:var(--yellow);color:var(--onb);border-color:var(--ink)} .wk.lost{background:var(--paper2)} .wk.next{border-style:dashed;background:transparent;color:var(--muted)}
+.big{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:3px solid var(--line);margin-top:12px}
+.big div{display:flex;flex-direction:column;padding:6px 10px 8px;min-width:0}
+.big div+div{border-left:3px solid var(--line)}
+.big b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1.15}
+.big span{font-family:var(--hud);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px 9px 0;vertical-align:top}
+tr+tr{border-top:2px solid var(--rule)}
+td:first-child{font-weight:700}
+th{font-family:var(--hud);font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.scroll{overflow-x:auto}
+svg.chart text{font-family:var(--hud);font-weight:600;font-size:10px;fill:var(--muted)}
+.list{margin:0;padding-left:20px}
+.list li{margin:7px 0;max-width:66ch;font-size:14.5px}
+
+/* ---------- impact ---------- */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
+.burst{position:absolute;width:132px;height:132px;margin:-66px 0 0 -66px;display:grid;place-items:center;font-family:var(--display);font-size:21px;color:var(--onb);animation:pow .72s steps(7) forwards}
+.burst::before,.burst::after{content:"";position:absolute;clip-path:var(--star)}
+.burst::before{inset:0;background:var(--ink);z-index:-2}
+.burst::after{inset:7px;background:var(--yellow);z-index:-1}
+@keyframes pow{0%{transform:scale(.3) rotate(-24deg);opacity:0}22%{transform:scale(1.1) rotate(-9deg);opacity:1}72%{transform:scale(1) rotate(-9deg);opacity:1}100%{transform:scale(1.2) rotate(-9deg);opacity:0}}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%) skewX(-9deg);background:var(--yellow);color:var(--onb);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-family:var(--display);font-size:14px;padding:3px 16px 5px;z-index:31}
+@media (max-width:340px){.tabs{gap:4px}.tabs button{font-size:10.5px!important;border-width:2px}}
+@media (max-width:380px){.tabs{gap:5px}.tabs button{font-size:11.5px;padding-inline:2px}.spl-r{width:92px;height:118px}.vs{padding-left:100px}}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="splashw"><div class="splashc"><header class="splash">
+    <div class="spl-l">
+      <p class="eyebrow"><span id="eyebrow">Hyperbolic Time Chamber</span></p>
+      <h1>Winter <em>Arc</em></h1>
+    </div>
+    <div class="spl-r">
+      <canvas id="aura" aria-hidden="true"></canvas>
+      <div class="emblem" aria-hidden="true"><b id="rank">1</b></div>
+    </div>
+    <div class="power">
+      <div class="powlab"><span id="form">Base</span><span id="xp">0 ki</span></div>
+      <div class="meter" aria-hidden="true"><i id="powbar" style="width:0%"></i></div>
+      <div class="loadrow"><span id="days"></span><button class="load" id="load" data-act="load" hidden><span id="loadt">Full power · 8.5h</span></button></div>
+    </div>
+  </header></div></div>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" data-tab="today" aria-selected="true"><span>Today</span></button>
+    <button role="tab" data-tab="plan" aria-selected="false"><span>Chamber</span></button>
+    <button role="tab" data-tab="events" aria-selected="false"><span>Arena</span></button>
+    <button role="tab" data-tab="stats" aria-selected="false"><span>Power</span></button>
+    <button role="tab" data-tab="library" aria-selected="false"><span>Capsule</span></button>
+  </nav>
+  <main id="view"></main>
+</div>
+<div id="fx" aria-hidden="true"></div>
+<div id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script src="vendor/supabase-2.117.3.js"></script>
+<script>
+(function(){
+"use strict";
+var DEF_START="2026-11-25", DEF_END="2027-01-17", LS="winterarc.v2";
+var L={nc:"https://neetcode.io/practice",cses:"https://cses.fi/problemset/",cph:"https://cses.fi/book/book.pdf",usaco:"https://usaco.guide/",cf:"https://codeforces.com/contests",atdp:"https://atcoder.jp/contests/dp",bs:"https://brainstellar.com/",s110:"https://stat110.net/",zeta:"https://arithmetic.zetamac.com/",fig:"https://www.figgie.com/",jsg:"https://www.janestreet.com/static/pdfs/trading-interview.pdf",jsp:"https://www.janestreet.com/puzzles/",tm:"https://tradermath.org/",pq:"https://www.puzzledquant.com/",qg:"https://www.quantguide.io/",pdsh:"https://jakevdp.github.io/PythonDataScienceHandbook/",iitpb:"https://github.com/iitpokerbots",mitpb:"https://github.com/mitpokerbots",pros:"https://prosperity.imc.com/",cfm:"https://codeforces.com/blog/entry/150819",istc:"https://istc.co/",qtl:"https://quantile.iqcs.in/",sha:"https://unstop.com/college-fests/shaastra-2027-indian-institute-of-technology-iit-madras-522673",spc:"https://unstop.com/hackathons/shaastra-programming-contest-2027-iit-madras-1782685",cfest:"https://codefest.iicpc.com/",imc:"https://www.imc.com/ap/careers/students-graduates/programs/launchpad",opt:"https://www.optiver.com/join-us/students/programs/",iqc:"https://www.worldquant.com/brain/iqc/",iitm:"https://internship.iitm.ac.in/students",hdl:"https://hdlbits.01xz.net/wiki/Problem_sets",rtos:"https://www.youtube.com/watch?v=F321087yYy4",frbook:"https://github.com/FreeRTOS/FreeRTOS-Kernel-Book",uart:"https://nandland.com/uart-serial-port-module/",tt:"https://github.com/TinyTapeout/ttihp-verilog-template",jsasic:"https://blog.janestreet.com/protocol-emulator-asic-competition/",nk:"https://builtin.com/job/nk-securities-research-hackathon-2025/6306065",nkedge:"https://job-boards.eu.greenhouse.io/nksecuritiesresearch/jobs/4961792101",gs:"https://goldmansachs.com/careers/students/programs-and-internships/india/hackathon",ag:"https://job-boards.greenhouse.io/alphagrepsecurities",grav:"https://job-boards.greenhouse.io/gravitonresearchcapital",desi:"https://deshawindia.com/careers",qstorm:"https://unstop.com/hackathons/quantstorm-iit-guwahati-1733840",npc:"https://techfest.org/",stmrtos:"https://www.digikey.com/en/maker/projects/getting-started-with-stm32-introduction-to-freertos/ad275395687e4d85935351e16ec575b1",wdog:"https://interrupt.memfault.com/blog/firmware-watchdog-best-practices",hfault:"https://interrupt.memfault.com/blog/cortex-m-fault-debug",frstack:"https://freertos.org/Stacks-and-stack-overflow-checking.html"};
+var NC=["NeetCode",L.nc], CS=["CSES",L.cses], CF=["Codeforces",L.cf], UG=["USACO Guide",L.usaco], GB="Green Book = Xinfeng Zhou, A Practical Guide to Quantitative Finance Interviews.";
+
+var TRACKS={
+  dsa:{name:"DSA and contests",when:"morning"},
+  prob:{name:"Probability",when:"afternoon"},
+  hw:{name:"Hardware",when:"late afternoon"},
+  build:{name:"Build",when:"evening"},
+  trade:{name:"Trading skills",when:"any time"}
+};
+var ORDER=["dsa","prob","hw","build","trade"];
+var BUD={full:{dsa:3,prob:2.5,hw:1.5,build:1,trade:.5},max:{dsa:4,prob:3,hw:1.5,build:1,trade:.5},half:{dsa:1.5,prob:1,hw:.5,build:.5,trade:.5},light:{dsa:1,prob:1,hw:0,build:0,trade:0},rest:{dsa:0,prob:0,hw:0,build:0,trade:0},off:{dsa:0,prob:0,hw:0,build:0,trade:0}};
+var TYPES=["full","max","half","light","rest"], TLAB={full:"Full power · 8.5h",max:"Max power · 10h",half:"Half power · 4h",light:"Warm-up · 2h",rest:"Senzu day"}, CHIP={max:"10h",half:"half",light:"warm-up",rest:"senzu"};
+
+/* t track, p priority (1 core, 2 flex: first to move to spring when time runs short, 3 bonus: appears only when ahead), h hours */
+var Q=[
+/* ---- DSA ---- */
+{id:"d01",t:"dsa",p:1,h:1,title:"Set up: accounts, template, compile script",d:"Codeforces and LeetCode accounts. One C++17 template with fast input/output. A one-line compile-and-run command you can type without thinking.",l:[CF]},
+{id:"d02",t:"dsa",p:1,h:2,title:"Time complexity and sorting",d:"Competitive Programmer's Handbook, chapters 1 to 3. Learn the rule of thumb: about 10^8 simple operations per second, so n = 10^5 needs O(n log n).",l:[["Handbook (PDF)",L.cph]]},
+{id:"d03",t:"dsa",p:1,h:3,n:5,title:"NeetCode: Arrays and Hashing, part 1",d:"Contains Duplicate, Valid Anagram, Two Sum, Group Anagrams, Top K Frequent Elements. Try each for 20 minutes, then watch the video even if you solved it.",l:[NC]},
+{id:"d04",t:"dsa",p:1,h:3,n:4,title:"NeetCode: Arrays and Hashing, part 2",d:"Encode and Decode Strings, Product of Array Except Self, Valid Sudoku, Longest Consecutive Sequence.",l:[NC]},
+{id:"d05",t:"dsa",p:1,h:3.5,n:4,title:"NeetCode: Two Pointers",d:"Valid Palindrome, Two Sum II, 3Sum, Container With Most Water. Trapping Rain Water only if you have time.",l:[NC]},
+{id:"d06",t:"dsa",p:1,h:2.5,c:5,title:"CSES Introductory Problems 1 to 5",d:"Your first contest-style problems. Read the input format carefully; most wrong answers here are overflow, so use long long.",l:[CS]},
+{id:"d07",t:"dsa",p:1,h:2.5,c:5,title:"CSES Introductory Problems 6 to 10",d:"Same section, next five.",l:[CS]},
+{id:"d08",t:"dsa",p:1,h:4,n:4,title:"NeetCode: Sliding Window",d:"Best Time to Buy and Sell Stock, Longest Substring Without Repeating Characters, Longest Repeating Character Replacement, Permutation in String. Skip the two Hards for now.",l:[NC]},
+{id:"d09",t:"dsa",p:1,h:4.5,n:6,title:"NeetCode: Stack",d:"Valid Parentheses, Min Stack, Evaluate Reverse Polish Notation, Generate Parentheses, Daily Temperatures, Car Fleet.",l:[NC]},
+{id:"d10",t:"dsa",p:1,h:3.5,k:1,title:"Contest 1: a Codeforces Div 4 round, virtual",d:"Pick a recent Div 4 round and start it as a virtual contest. Full duration, no pausing. Afterwards, upsolve every problem you missed up to E.",l:[CF]},
+{id:"d11",t:"dsa",p:1,h:5,n:6,title:"NeetCode: Binary Search",d:"Binary Search, Search a 2D Matrix, Koko Eating Bananas, Find Minimum in Rotated Sorted Array, Search in Rotated Sorted Array, Time Based Key-Value Store.",l:[NC]},
+{id:"d12",t:"dsa",p:1,h:4,title:"Prefix sums and binary search on the answer",d:"USACO Guide Silver: read 'Introduction to Prefix Sums' and 'Binary Search', then solve two problems from each module.",l:[UG]},
+{id:"d13",t:"dsa",p:1,h:4,c:6,title:"CSES Sorting and Searching 1 to 6",d:"Uses sort, set, map and two pointers. This section is the closest thing to real online-assessment questions.",l:[CS]},
+{id:"d14",t:"dsa",p:1,h:4,c:6,title:"CSES Sorting and Searching 7 to 12",d:"Next six in the same section.",l:[CS]},
+{id:"d15",t:"dsa",p:1,h:3.5,k:1,title:"Contest 2: a Div 3 round, virtual",d:"Full duration. Aim for A to C. Upsolve the first one you could not finish.",l:[CF]},
+{id:"d16",t:"dsa",p:2,h:4,n:6,title:"NeetCode: Linked List",d:"Reverse Linked List, Merge Two Sorted Lists, Linked List Cycle, Reorder List, Remove Nth Node From End, Add Two Numbers. Rare in contests, common in software interviews.",l:[NC]},
+{id:"d17",t:"dsa",p:1,h:3.5,n:6,title:"NeetCode: Trees, part 1",d:"Invert Binary Tree, Maximum Depth, Diameter, Balanced Binary Tree, Same Tree, Subtree of Another Tree. Get recursion on trees to feel automatic.",l:[NC]},
+{id:"d18",t:"dsa",p:1,h:3.5,n:5,title:"NeetCode: Trees, part 2",d:"Lowest Common Ancestor of a BST, Level Order Traversal, Right Side View, Count Good Nodes, Validate BST.",l:[NC]},
+{id:"d19",t:"dsa",p:1,h:3,n:2,title:"NeetCode: Trees, part 3",d:"Kth Smallest Element in a BST, Construct Binary Tree from Preorder and Inorder. Skip the Hards.",l:[NC]},
+{id:"d20",t:"dsa",p:1,h:3.5,k:1,title:"Contest 3: a Div 3 round, virtual",d:"Full duration, then upsolve.",l:[CF]},
+{id:"d21",t:"dsa",p:1,h:4.5,n:5,title:"NeetCode: Heap and Priority Queue",d:"Kth Largest Element in a Stream, Last Stone Weight, K Closest Points to Origin, Kth Largest Element in an Array, Task Scheduler.",l:[NC]},
+{id:"d22",t:"dsa",p:2,h:5,n:6,title:"NeetCode: Backtracking",d:"Subsets, Combination Sum, Permutations, Subsets II, Word Search, Palindrome Partitioning.",l:[NC]},
+{id:"d23",t:"dsa",p:1,h:4,n:3,title:"Graphs 1: traversal and flood fill",d:"USACO Guide Silver: 'Graph Traversal' and 'Flood Fill'. Then NeetCode: Number of Islands, Max Area of Island, Clone Graph.",l:[UG,NC]},
+{id:"d24",t:"dsa",p:1,h:5,n:6,title:"Graphs 2: BFS, DFS and cycles",d:"Rotting Oranges, Pacific Atlantic Water Flow, Surrounded Regions, Course Schedule, Course Schedule II, Graph Valid Tree.",l:[NC]},
+{id:"d25",t:"dsa",p:1,h:4,c:5,title:"CSES Graph Algorithms 1 to 5",d:"Counting Rooms through Building Teams. Grid BFS and connected components in contest form.",l:[CS]},
+{id:"d26",t:"dsa",p:1,h:3.5,k:1,title:"Contest 4: a Div 3 round, virtual",d:"Full duration, then upsolve.",l:[CF]},
+{id:"d27",t:"dsa",p:1,h:4,n:5,title:"Dynamic programming 1",d:"Climbing Stairs, Min Cost Climbing Stairs, House Robber, House Robber II, Coin Change. For each, write the state and the transition in words before coding.",l:[NC]},
+{id:"d28",t:"dsa",p:1,h:3.5,n:5,title:"Dynamic programming 2",d:"Longest Palindromic Substring, Decode Ways, Maximum Product Subarray, Word Break, Longest Increasing Subsequence.",l:[NC]},
+{id:"d29",t:"dsa",p:1,h:5,title:"AtCoder DP contest, A to F",d:"Frog 1, Frog 2, Vacation, Knapsack 1, Knapsack 2, LCS. The cleanest DP practice set there is.",l:[["AtCoder DP",L.atdp]]},
+{id:"d30",t:"dsa",p:1,h:3.5,c:4,title:"CSES Dynamic Programming 1 to 4",d:"Dice Combinations onward.",l:[CS]},
+{id:"d31",t:"dsa",p:1,h:3.5,c:4,title:"CSES Dynamic Programming 5 to 8",d:"Next four.",l:[CS]},
+{id:"d32",t:"dsa",p:1,h:3.5,k:1,title:"Contest 5: a Div 2 round, virtual",d:"Target A and B, attempt C. Upsolve C afterwards whatever happens.",l:[CF]},
+{id:"d33",t:"dsa",p:1,h:4,n:5,title:"Dynamic programming on grids and two sequences",d:"Unique Paths, Longest Common Subsequence, Best Time to Buy and Sell Stock with Cooldown, Coin Change II, Target Sum.",l:[NC]},
+{id:"d34",t:"dsa",p:2,h:5,title:"AtCoder DP contest, G to M",d:"Longest Path through Candies. Harder; this is where DP starts to feel like contest DP.",l:[["AtCoder DP",L.atdp]]},
+{id:"d35",t:"dsa",p:2,h:5,n:7,title:"NeetCode: Greedy and Intervals",d:"Maximum Subarray, Jump Game, Jump Game II, Gas Station, Insert Interval, Merge Intervals, Non-overlapping Intervals.",l:[NC]},
+{id:"d36",t:"dsa",p:1,h:5,c:2,title:"Shortest paths and union-find",d:"USACO Guide Gold: 'Shortest Paths with Non-Negative Edge Weights' and 'Disjoint Set Union'. Then CSES Shortest Routes I and Road Construction.",l:[UG,CS]},
+{id:"d37",t:"dsa",p:2,h:3.5,c:2,title:"Topological sort",d:"USACO Guide Gold 'Topological Sort', then CSES Course Schedule and Longest Flight Route.",l:[UG,CS]},
+{id:"d38",t:"dsa",p:1,h:3.5,k:1,title:"Your first rated Codeforces round",d:"Any live Div 3 or Div 2. The rating you get does not matter; sitting a live round does. Upsolve after.",l:[CF]},
+{id:"d39",t:"dsa",p:1,h:4,k:1,title:"Codefest rehearsal",d:"Run last year's IICPC Codefest prelims mirror as a virtual contest, then upsolve. This tells you where you stand before the real prelims.",l:[["Prelims mirror",L.cfm]]},
+{id:"d40",t:"dsa",p:3,h:5,c:6,title:"Bonus: CSES Range Queries 1 to 6",d:"Prefix sums, then your first Fenwick tree or segment tree.",l:[CS]},
+{id:"d41",t:"dsa",p:3,h:4,n:8,title:"Bonus: bit manipulation and math",d:"NeetCode Bit Manipulation and Math sections, Easy and Medium only.",l:[NC]},
+{id:"d42",t:"dsa",p:3,h:7,k:2,title:"Bonus: two more virtual contests",d:"Div 2 rounds. Upsolve one problem past where you stopped.",l:[CF]},
+
+/* ---- PROBABILITY ---- */
+{id:"p01",t:"prob",p:1,h:4,title:"Conditional expectation, out loud",d:"Twelve exercises from Blitzstein chapter 9 (Adam's law, Eve's law), solved aloud with no notes. This is the most-asked idea in trading interviews.",l:[["Stat 110",L.s110]]},
+{id:"p02",t:"prob",p:1,h:4.5,title:"Blitzstein chapter 11, Markov chains, part 1",d:"Sections 11.1 to 11.3: the Markov property, classification of states, stationary distributions. Six exercises.",l:[["Stat 110",L.s110]]},
+{id:"p03",t:"prob",p:1,h:4.5,title:"Blitzstein chapter 11, part 2",d:"Section 11.4 on reversibility and random walks on graphs. Six exercises. Practise first-step analysis until setting up the equations is routine.",l:[["Stat 110",L.s110]]},
+{id:"p04",t:"prob",p:1,h:4,title:"Green Book 2.1 to 2.3",d:"Problem simplification, logic reasoning, thinking out of the box. "+GB},
+{id:"p05",t:"prob",p:1,h:3,title:"Green Book 2.4 to 2.5",d:"Application of symmetry, series summation."},
+{id:"p06",t:"prob",p:1,h:2.5,title:"Brainstellar Easy, first half",d:"No paper. Say the answer and the reasoning aloud before you check.",l:[["Brainstellar",L.bs]]},
+{id:"p07",t:"prob",p:1,h:2.5,title:"Brainstellar Easy, second half",d:"Finish the Easy set.",l:[["Brainstellar",L.bs]]},
+{id:"p08",t:"prob",p:1,h:4,title:"Green Book 4.1 to 4.2",d:"Basic probability definitions and set operations, combinatorial analysis."},
+{id:"p09",t:"prob",p:1,h:4,title:"Green Book 4.3",d:"Conditional probability and Bayes' formula. Every problem in this section is a known interview question."},
+{id:"p10",t:"prob",p:2,h:5,title:"Green Book 2.6 to 2.9",d:"Pigeonhole principle, modular arithmetic, induction, proof by contradiction."},
+{id:"p11",t:"prob",p:1,h:3,title:"Brainstellar Medium, set 1",d:"About twelve problems, three minutes each on a timer. Mark the ones you missed.",l:[["Brainstellar",L.bs]]},
+{id:"p12",t:"prob",p:1,h:3,title:"Brainstellar Medium, set 2",d:"Next twelve, same rules.",l:[["Brainstellar",L.bs]]},
+{id:"p13",t:"prob",p:1,h:3.5,title:"Green Book 4.4",d:"Discrete and continuous distributions."},
+{id:"p14",t:"prob",p:1,h:4.5,title:"Green Book 4.5",d:"Expected value, variance and covariance. Linearity of expectation and indicator variables should become your first move."},
+{id:"p15",t:"prob",p:1,h:2.5,title:"Mosteller 1 to 8",d:"Fifty Challenging Problems in Probability. Short problems, famous answers."},
+{id:"p16",t:"prob",p:1,h:2.5,title:"Mosteller 9 to 15",d:"Next seven."},
+{id:"p17",t:"prob",p:1,h:3,title:"Order statistics",d:"Green Book 4.6, plus the order statistics section of Blitzstein chapter 8. Expected maximum and minimum of uniforms and of dice."},
+{id:"p18",t:"prob",p:1,h:3,title:"Classics drill 1",d:"From a blank page, aloud, five minutes each: Monty Hall, two children, expected flips to HH and to HT, HTH against HHT, gambler's ruin, noodle ends, birthday problem, 100 prisoners and drawers, expected maximum of two dice, coupon collector, breaking a stick into a triangle, optimal stopping on a die with rerolls."},
+{id:"p19",t:"prob",p:1,h:3,title:"Brainstellar Medium, set 3",d:"Timed, three minutes each.",l:[["Brainstellar",L.bs]]},
+{id:"p20",t:"prob",p:1,h:3,title:"Brainstellar Medium, set 4",d:"Finish the Medium set.",l:[["Brainstellar",L.bs]]},
+{id:"p21",t:"prob",p:1,h:5,title:"Green Book 5.1",d:"Markov chains: gambler's ruin, coin-sequence races, dice games. Solve each with first-step equations."},
+{id:"p22",t:"prob",p:1,h:2.5,title:"Mosteller 16 to 23",d:"Next eight."},
+{id:"p23",t:"prob",p:1,h:2.5,title:"Mosteller 24 to 30",d:"Next seven."},
+{id:"p24",t:"prob",p:1,h:4,title:"Green Book 5.2",d:"Martingales and random walks. Learn the stopping-time shortcut for expected durations."},
+{id:"p25",t:"prob",p:1,h:4,title:"Green Book 5.3",d:"Dynamic programming: dice games, optimal stopping, the secretary problem."},
+{id:"p26",t:"prob",p:1,h:2.5,title:"Timed set A",d:"Twenty mixed problems at three minutes each from PuzzledQuant or the free QuantGuide questions. Score yourself honestly.",l:[["PuzzledQuant",L.pq],["QuantGuide",L.qg]]},
+{id:"p27",t:"prob",p:1,h:3,title:"Mosteller 31 to 40",d:"Next ten."},
+{id:"p28",t:"prob",p:1,h:3,title:"Mosteller 41 to 50",d:"Finish the book."},
+{id:"p29",t:"prob",p:2,h:4.5,title:"Brainstellar Hard, first 15",d:"Ten minutes each before you look. These are harder than most interview questions.",l:[["Brainstellar",L.bs]]},
+{id:"p30",t:"prob",p:1,h:2.5,title:"Timed set B",d:"Twenty more, three minutes each. Compare with set A.",l:[["PuzzledQuant",L.pq],["QuantGuide",L.qg]]},
+{id:"p31",t:"prob",p:1,h:1.5,title:"Mock interview 1",d:"Five problems in 45 minutes, aloud, recorded on your phone. Listen back once: where did you go silent?"},
+{id:"p32",t:"prob",p:1,h:2,title:"Classics drill 2",d:"The same list as drill 1, two minutes each this time."},
+{id:"p33",t:"prob",p:1,h:1.5,title:"Mock interview 2",d:"With a friend if you can. They pick five problems and give hints only when you ask."},
+{id:"p34",t:"prob",p:3,h:6,title:"Bonus: Heard on the Street, quantitative chapter",d:"Timothy Crack's book. Thirty selected problems from the purely quantitative and logic chapter."},
+{id:"p35",t:"prob",p:3,h:4,title:"Bonus: three Jane Street monthly puzzles",d:"From the archive. Harder than interviews; good for stamina.",l:[["Puzzle archive",L.jsp]]},
+{id:"p36",t:"prob",p:3,h:4,title:"Bonus: Blitzstein chapter 13",d:"Poisson processes. Read, then six exercises.",l:[["Stat 110",L.s110]]},
+{id:"p37",t:"prob",p:3,h:4,title:"Bonus: the rest of Brainstellar Hard",d:"Ten minutes each.",l:[["Brainstellar",L.bs]]},
+
+/* ---- BUILD ---- */
+{id:"b01",t:"build",p:1,h:2,title:"NumPy tune-up",d:"You already write Python from the programming lab. Python Data Science Handbook chapter 2: arrays, broadcasting, random numbers.",l:[["Handbook",L.pdsh]]},
+{id:"b02",t:"build",p:1,h:2,title:"pandas and plotting",d:"Chapter 3 basics (Series, DataFrame, groupby) and simple line and histogram plots from chapter 4.",l:[["Handbook",L.pdsh]]},
+{id:"b03",t:"build",p:1,h:2,title:"Simulation lab 1",d:"Start a GitHub repository. Simulate five puzzles you have already solved and compare the simulated answer with the exact one."},
+{id:"b04",t:"build",p:1,h:2,title:"Simulation lab 2",d:"Five more, including the HH against HTH race and gambler's ruin. Add a table of theory against simulation to the README."},
+{id:"b05",t:"build",p:1,h:3,title:"Market-making simulator 1: the market",d:"A fair value that follows a random walk, and random buyers and sellers who trade against whatever quotes exist. No strategy yet."},
+{id:"b06",t:"build",p:1,h:3,title:"Simulator 2: your quoting bot",d:"Quote a bid and an ask at a fixed spread around fair value. Track cash, inventory and profit. Plot all three."},
+{id:"b07",t:"build",p:1,h:3,title:"Simulator 3: inventory control",d:"Shift both quotes against your position so you lean back toward flat. Compare the profit and its variance with the fixed-spread bot."},
+{id:"b08",t:"build",p:2,h:3,title:"Simulator 4: informed traders",d:"Add traders who know where fair value is going. Sweep the spread and plot profit against how many informed traders there are. This is adverse selection, and you will have measured it yourself."},
+{id:"b09",t:"build",p:1,h:2.5,title:"Write it up",d:"A README with three plots and three findings in plain words. This is your quant project for the resume and your answer to 'tell me about something you built'."},
+{id:"b10",t:"build",p:1,h:3,due:"2027-01-17",lead:14,title:"Pokerbot 1: run the engine",d:"Clone last year's IIT Pokerbots engine, run the skeleton bot, read how a hand is played through the API. When ISTC releases this year's rules, read those first.",l:[["IIT Pokerbots",L.iitpb],["ISTC",L.istc]]},
+{id:"b11",t:"build",p:1,h:3,due:"2027-01-17",lead:10,title:"Pokerbot 2: a pot-odds bot",d:"Estimate your chance of winning the hand, compare it with the pot odds, then fold, call or raise. This simple bot beats most first submissions.",l:[["MIT Pokerbots",L.mitpb]]},
+{id:"b12",t:"build",p:2,h:3,due:"2027-01-17",lead:7,title:"Pokerbot 3: equity by simulation",d:"Monte Carlo the hand equity, size bets by strength, and test against your own earlier bot."},
+{id:"b13",t:"build",p:1,h:2,title:"Resume draft and proofs folder",d:"One page. Start a folder with proof for every line (certificates, links, screenshots); the institute asks for it in June."},
+{id:"b14",t:"build",p:3,h:5,title:"Bonus: Prosperity warm-up",d:"Read two write-ups from last year's top teams and run a tutorial-round bot. The real competition is expected in April.",l:[["Prosperity",L.pros]]},
+{id:"b15",t:"build",p:3,h:12,title:"Bonus: limit order book in C++",d:"Price-time priority matching with std::map. A spring project; it only shows up here if you are far ahead."},
+
+/* ---- TRADING ---- */
+{id:"t01",t:"trade",p:1,h:2,title:"Read Jane Street's Probability and Markets guide",d:"Short and free. It explains what an interviewer means by 'make me a market'.",l:[["The guide (PDF)",L.jsg]]},
+{id:"t02",t:"trade",p:1,h:2,title:"Mental math toolkit",d:"Arthur Benjamin, Secrets of Mental Math, chapters 1 to 3: left-to-right addition, two-digit by one-digit, squaring two-digit numbers. Memorise halves through twelfths as decimals."},
+{id:"t03",t:"trade",p:1,h:1.5,title:"Market making, solo",d:"Six rounds. Make a two-sided market on the sum of three dice, then on heads in ten flips. Reveal one die or two flips and requote. Write down your fair value and why your spread is that wide."},
+{id:"t04",t:"trade",p:1,h:2,title:"Figgie, ten rounds",d:"Jane Street's trading card game, free in the browser. Play to learn what it feels like to trade with incomplete information.",l:[["Figgie",L.fig]]},
+{id:"t05",t:"trade",p:1,h:2,title:"Expected value and bet sizing",d:"Read up on the Kelly criterion, then six betting puzzles from Brainstellar or the Green Book. For each: what is the edge, and how much would you stake?",l:[["Brainstellar",L.bs]]},
+{id:"t06",t:"trade",p:1,h:1.5,title:"Estimation and calibration",d:"Twenty estimation questions (city populations, distances, counts). Give a 90% range for each. You are calibrated if 16 to 19 of the 20 ranges contain the truth."},
+{id:"t07",t:"trade",p:1,h:1.5,title:"Eighty questions in eight minutes, three sittings",d:"The Optiver-style arithmetic test, where wrong answers cost marks. Do three sittings on different days and log each score.",l:[["TraderMath",L.tm]]},
+{id:"t08",t:"trade",p:2,h:1,title:"Number sequences, two sets",d:"Pattern-spotting sets of the kind trading firms use in online assessments.",l:[["TraderMath",L.tm]]},
+{id:"t09",t:"trade",p:1,h:1.5,title:"Market making against a counterparty, three sessions",d:"A friend, or a Claude chat told to act as a customer who trades against your quotes and reveals information in stages. Thirty minutes each."},
+{id:"t10",t:"trade",p:1,h:2,due:"2027-01-17",lead:16,title:"Poker math",d:"Hand rankings, pot odds, equity, the expected value of a call. The first MIT Pokerbots lecture covers all of it.",l:[["MIT Pokerbots",L.mitpb]]},
+{id:"t11",t:"trade",p:1,h:2,due:"2027-01-25",lead:14,title:"Pricing a live game",d:"The ISTC Trading League makes markets on a simulated live sports match. Practise ten scenarios: price 'team A wins' as the score and the clock change, and say how your quote should move after each event.",l:[["ISTC",L.istc]]},
+{id:"t12",t:"trade",p:1,h:1,due:"2027-01-16",lead:8,title:"Read the Quantile and ISTC formats",d:"Read both rule sets as soon as they are published and work through any sample questions.",l:[["Quantile",L.qtl],["ISTC",L.istc]]},
+{id:"t13",t:"trade",p:2,h:1.5,title:"Figgie, ten more rounds",d:"This time with one goal: never hold a position you cannot explain.",l:[["Figgie",L.fig]]},
+{id:"t14",t:"trade",p:1,h:1,title:"Your market-making checklist",d:"One page in your own words: how you set fair value, how wide you quote and why, what you do after you get hit. You will reread this before every trading interview."},
+{id:"h01",t:"hw",p:1,h:1.5,due:"2026-12-01",lead:10,title:"RTOS: agree what finished means",d:"Message the Abhyuday lead before you write any code. Which board and sensors, which tasks the flight computer must run, who owns the flight logic, what you hand over, and by when. Write the answers in the team repo. The drills below assume FreeRTOS on the STM32H743; change them if the answers differ."},
+{id:"h02",t:"hw",p:1,h:3,title:"RTOS 1: tasks, scheduling, memory",d:"Shawn Hymel's Introduction to RTOS, parts 1 to 4, on your ESP32. Do each challenge yourself before you watch his solution.",l:[["Intro to RTOS, part 1",L.rtos],["FreeRTOS kernel book",L.frbook]]},
+{id:"h03",t:"hw",p:1,h:3,title:"RTOS 2: queues, mutexes, semaphores",d:"Parts 5 to 7. Build the producer and consumer exercise with a queue, then break it on purpose with a shared variable and fix it with a mutex.",l:[["Intro to RTOS, part 1",L.rtos]]},
+{id:"h04",t:"hw",p:1,h:2.5,title:"RTOS 3: timers and interrupts",d:"Parts 8 and 9. Software timers, and passing data from an interrupt to a task with the FromISR calls. This is how a sensor's data-ready interrupt reaches your code.",l:[["Intro to RTOS, part 1",L.rtos]]},
+{id:"h05",t:"hw",p:1,h:2.5,title:"RTOS 4: deadlock, starvation, priority inversion",d:"Parts 10 to 12. For each failure, write two lines on how it could happen in the flight computer and how you will prevent it. Those lines go into your design note.",l:[["Intro to RTOS, part 1",L.rtos]]},
+{id:"h06",t:"hw",p:1,h:3,title:"RTOS 5: FreeRTOS on the STM32",d:"Generate a FreeRTOS project in CubeIDE. Move the HAL timebase off SysTick to a spare timer when CubeMX asks, pick heap_4, and decide with the team whether you write against the CMSIS-RTOS wrapper or the native FreeRTOS calls. Two tasks: a heartbeat LED and a UART print once a second. No flight computer at home? Use any STM32 board you can borrow.",l:[["STM32 and FreeRTOS",L.stmrtos],["FreeRTOS kernel book",L.frbook]]},
+{id:"h07",t:"hw",p:1,h:2.5,title:"RTOS 6: the design on one page",d:"Before more code: a table of every task with its rate, priority and stack size, every queue with what flows through it, what runs in an interrupt and what runs in a task, and the flight states. Send it to the lead and get a yes. This page is what makes the rest go well."},
+{id:"h08",t:"hw",p:1,h:4,title:"RTOS 7: skeleton that runs",d:"Sensor task at a fixed rate with vTaskDelayUntil, logger task, telemetry task, joined by queues, all with fake data first. Nothing else until this runs for an hour without a hiccup."},
+{id:"h09",t:"hw",p:1,h:4,title:"RTOS 8: real sensors under the RTOS",d:"Bring in the barometer and one other sensor. One mutex per bus. The interrupt wakes its task with a task notification and does nothing else. Any interrupt that calls a FromISR function must sit at or below the kernel's maximum syscall priority; getting that wrong is the classic crash. On the H7, read ST's note on DMA with the data cache before you enable both."},
+{id:"h10",t:"hw",p:1,h:3,title:"RTOS 9: logging that survives",d:"The sensor task never waits on storage: it pushes to a queue and the logger drains it to the F-RAM. Give every record a sequence number and a checksum so a reset in the middle of a write is detectable. Pull the power mid-run and prove the log reads back."},
+{id:"h11",t:"hw",p:1,h:3.5,title:"RTOS 10: flight states and watchdog",d:"A state machine for pad, boost, coast, descent and landed. A supervisor task feeds the hardware watchdog only when every other task has checked in. Log the reset reason at every boot.",l:[["Watchdog guide",L.wdog]]},
+{id:"h12",t:"hw",p:1,h:2.5,title:"RTOS 11: break it on purpose",d:"Turn on stack overflow checking, the malloc-failed hook and configASSERT, and write a HardFault handler that records where it happened. Then cause each failure on the bench and confirm the board logs it and recovers.",l:[["Stack overflow checking",L.frstack],["Debugging a HardFault",L.hfault]]},
+{id:"h13",t:"hw",p:1,h:2.5,title:"RTOS 12: prove the timing",d:"Toggle a pin in the sensor task and measure the worst jitter over ten minutes while the logger and telemetry are busy. Record each task's stack high-water mark and CPU share. Put the numbers in a table. This table is what separates done from done well."},
+{id:"h14",t:"hw",p:1,h:3,title:"RTOS 13: fly it on the bench",d:"Feed a recorded or simulated pressure profile into the sensor queue and watch every state change fire at the right moment, apogee included. Run it ten times. Nothing connected to the pyro channels."},
+{id:"h15",t:"hw",p:1,h:2.5,title:"RTOS 14: hand it over",d:"README, the design page, the timing table, a list of known limits, code pushed and tagged in the team repo, and a walkthrough with the lead. Ask them to try to break it."},
+{id:"h16",t:"hw",p:1,h:2.5,title:"HDLBits 1: language basics and vectors",d:"Getting Started, then Verilog Language: Basics and Vectors. You have built adders in Vivado, so move fast and stop only on what surprises you.",l:[["HDLBits",L.hdl]]},
+{id:"h17",t:"hw",p:1,h:2.5,title:"HDLBits 2: modules and procedures",d:"Modules: Hierarchy, then Procedures. Know cold why an incomplete if or case creates a latch, and how blocking and non-blocking assignment differ. Both are standard interview questions.",l:[["HDLBits",L.hdl]]},
+{id:"h18",t:"hw",p:1,h:2.5,title:"HDLBits 3: combinational circuits",d:"More Verilog Features, then Circuits: basic gates, multiplexers, arithmetic circuits, Karnaugh maps.",l:[["HDLBits",L.hdl]]},
+{id:"h19",t:"hw",p:1,h:3,title:"HDLBits 4: flip-flops and counters",d:"Sequential Logic: Latches and Flip-Flops, then Counters.",l:[["HDLBits",L.hdl]]},
+{id:"h20",t:"hw",p:2,h:2.5,title:"HDLBits 5: shift registers and more circuits",d:"Shift Registers, then More Circuits.",l:[["HDLBits",L.hdl]]},
+{id:"h21",t:"hw",p:2,h:4,title:"HDLBits 6: state machines, part 1",d:"Finite State Machines, from the simple ones through the Lemmings set. State machines are most of what an FPGA interview asks.",l:[["HDLBits",L.hdl]]},
+{id:"h22",t:"hw",p:2,h:4,title:"HDLBits 7: state machines, part 2",d:"The rest of the state machine set: the serial receiver, PS/2 packets, sequence recognisers. The serial receiver is the UART project in miniature.",l:[["HDLBits",L.hdl]]},
+{id:"h23",t:"hw",p:2,h:2,title:"HDLBits 8: testbenches",d:"Verification: Finding Bugs in Code, Build a Circuit from a Simulation Waveform, Writing Testbenches.",l:[["HDLBits",L.hdl]]},
+{id:"h24",t:"hw",p:2,h:3,title:"Project 1: UART transmitter",d:"Your own Verilog, 115200 baud, 8 data bits, no parity, one stop bit, with a self-checking testbench in Vivado's simulator. Read a reference design only after yours passes.",l:[["nandland UART",L.uart]]},
+{id:"h25",t:"hw",p:2,h:3,title:"Project 2: UART receiver and loopback",d:"A receiver with 16 times oversampling. Wire transmitter to receiver in the testbench and send 1,000 random bytes. Zero mismatches or it is not done.",l:[["nandland UART",L.uart]]},
+{id:"h26",t:"hw",p:3,h:3,title:"Project 3: FIFO, synthesis, write-up",d:"Add a small synchronous FIFO, run synthesis for the Basys 3 and record the LUT count and worst slack. A README with a waveform screenshot, on GitHub."},
+{id:"h27",t:"hw",p:3,h:2,title:"HDLBits 9: building larger circuits",d:"The last sequential section. It chains counters, shift registers and state machines into one timer.",l:[["HDLBits",L.hdl]]},
+{id:"h28",t:"hw",p:3,h:10,due:"2027-01-18",lead:30,title:"Jane Street chip design competition",d:"A reprogrammable protocol emulator chip in Verilog on the Tiny Tapeout template, due 18 Jan. Jane Street calls it a big project and recommends teams. Only with two teammates who know Verilog, and only once the flight computer work is handed over.",l:[["Competition post",L.jsasic],["Tiny Tapeout template",L.tt]]},
+{id:"h29",t:"hw",p:3,h:8,title:"Market-data parser in Verilog",d:"Parse a fixed-format price message arriving one byte at a time and keep the best bid and offer in registers. This is a low-latency firm's daily work in miniature, and the strongest thing you could show an FPGA interviewer."}
+];
+
+/* Deadlines: things to do by a date, shown on Today */
+var A=[
+{id:"a1",due:"2026-11-12",gone:"2026-11-22",title:"Register for the Shaastra Quantathon",d:"Free and individual. A listings site shows registration closing on 12 Nov, so check the Unstop page today. Last year: two online prelims of 40 multiple-choice questions in 60 minutes on logic, probability and puzzles; finals on campus during Shaastra.",l:[["Shaastra on Unstop",L.sha]]},
+{id:"a2",due:"2026-11-19",gone:"2026-11-20",title:"Finish end-sems",d:"Nothing on this page matters before the last paper."},
+{id:"a3",due:"2026-11-22",gone:"2026-12-05",title:"Decide: free route or a paid contest course",d:"The DSA track is written for the free route (NeetCode, USACO Guide, CSES). If you buy a course, its lessons replace the USACO Guide drills; the practice drills stay."},
+{id:"a4",due:"2026-11-25",gone:"2026-12-10",title:"Find out when the next semester starts",d:"Then set the arc's end date in the Chamber tab. Everything reschedules around it."},
+{id:"a5",due:"2026-11-28",gone:"2026-11-29",title:"Register for the Shaastra Programming Contest",d:"Listings disagree: one says registration closed on 11 Nov, another says 28 Nov. Check Unstop today. Online prelims on CodeChef; a first benchmark for the DSA track.",l:[["Contest page",L.spc]]},
+{id:"a6",due:"2026-11-30",gone:"2027-01-18",title:"Register for ISTC 2027",d:"Trading League and Pokerbots. Registrations are open and no closing date is shown, so do it now.",l:[["ISTC",L.istc]]},
+{id:"a7",due:"2026-12-05",gone:"2027-01-17",title:"Sign up for the Quantile registration alert",d:"Registration 'opens soon'. The first round is online on 17 Jan.",l:[["Quantile",L.qtl]]},
+{id:"a8",due:"2026-12-20",gone:"2027-01-17",title:"Ask two seniors about last season",d:"Which quant firms came, what each online assessment looked like, and what CGPA they shortlisted at. Ten minutes of their time saves you weeks."},
+{id:"a9",from:"2026-12-01",due:"2027-01-10",gone:"2027-01-31",title:"Check IICPC Codefest 2027 dates and register",d:"Not announced yet. Last year registration closed on 15 Jan and prelims were on 31 Jan.",l:[["Codefest",L.cfest]]},
+{id:"a10",from:"2027-01-04",due:"2027-01-31",gone:"2027-03-05",title:"Watch for IMC Launchpad India applications",d:"Not announced yet. Last year's listing closed around 1 March. Apply the day it opens.",l:[["IMC Launchpad",L.imc]]},
+{id:"a11",from:"2026-11-25",due:"2026-12-08",gone:"2026-12-11",title:"Shaastra: Embedded Programming Challenge, Verilog Verse",d:"A listings site shows registration closing on 8 Dec for the Embedded Programming Challenge and 10 Dec for Verilog Verse. The embedded one fits your RTOS work; Verilog Verse is only for a look at the format this year. Check both on Unstop.",l:[["Shaastra on Unstop",L.sha]]},
+{id:"a12",from:"2026-11-25",due:"2026-12-05",gone:"2026-12-20",title:"Chip competition: find a team or skip it",d:"Jane Street's chip design competition closes on 18 Jan and is too big to do alone on 90 minutes a day. Ask two people from Abhyuday electronics or your Verilog lab. No team by 5 Dec means you skip it. The flight computer comes first either way.",l:[["Competition post",L.jsasic]]}
+];
+
+var EVENTS=[
+{id:"e1",sort:"2026-11-12",pri:"high",conf:"part",name:"Shaastra Quantathon",org:"IIT Madras, Shaastra 2027",when:"Register by 12 Nov (check Unstop). Online prelims, dates not yet posted. Finals on campus in early January.",tests:"Individual. Last year: two online prelims of 40 multiple-choice questions in 60 minutes on logic, probability and puzzles, best score counts.",act:"Register now. It is free, on your own campus, and tests exactly what the Probability track trains.",url:L.sha},
+{id:"e2",sort:"2026-11-28",pri:"med",conf:"part",name:"Shaastra Programming Contest",org:"IIT Madras, Shaastra 2027",when:"Listings disagree on the registration deadline: one says 11 Nov, another 28 Nov. Check Unstop today. Online prelims on CodeChef, finals on campus in January.",tests:"Competitive programming.",act:"Enter for the experience. You will be a few weeks into DSA, so treat the result as a baseline.",url:L.spc},
+{id:"e3",sort:"2027-01-17",pri:"high",conf:"yes",name:"Quantile 2027",org:"IQCS with the IIT Kanpur Programming Club. Title sponsor: Jane Street",when:"Spark, online, 17 Jan. Orbit at IIT centres in February. Nova, the final, at IIT Kanpur in March.",tests:"Individual and free. Described as a quant championship 'with no answer key'; no finance needed. Full format arrives with registration.",act:"Registration opens soon. Sign up for the alert.",url:L.qtl},
+{id:"e4",sort:"2027-01-18",pri:"top",conf:"yes",name:"ISTC 2027",org:"Indian Strategy and Trading Conclave. Sponsors: Jane Street, Optiver",when:"Pokerbots prelims 18 to 24 Jan. Trading League prelims 26 Jan. Qualifiers 13 Feb. Grand Finale 12 to 14 Mar in Mumbai.",tests:"Trading League: market making on a simulated live sports game. Pokerbots: write a poker bot (Python only last year). The top 300 in each go to a Strategy and Trading Test on probability and arbitrage. 60 finalists, expenses covered.",act:"The most relevant event on this list for a trading seat. Register now; the Build and Trading tracks lead straight into both prelims.",url:L.istc},
+{id:"e5",sort:"2027-01-30",pri:"med",conf:"exp",name:"IICPC Codefest 2027",org:"IICPC",when:"Expected late January. Last year: registration closed 15 Jan, prelims 31 Jan. Not announced yet.",tests:"Individual competitive programming. Last year the top 600 Indian students went to regionals.",act:"A benchmark for the DSA track. Check the site from December.",url:L.cfest},
+{id:"e6",sort:"2027-02-15",pri:"top",conf:"exp",name:"IMC Launchpad India, Trading",org:"IMC Trading, Mumbai",when:"Expected: applications in January and February (last year's listing closed around 1 Mar). Two-day program in Mumbai in mid-May.",tests:"Last year: open to IIT Madras students eligible for the next summer's internship, CGPA 8.0 or above. Outstanding participants were fast-tracked to the interview stage for the trading internship.",act:"A direct route into a trading internship. Watch the careers page from January.",url:L.imc},
+{id:"e7",sort:"2027-03-17",pri:"low",conf:"exp",name:"WorldQuant IQC",org:"WorldQuant BRAIN",when:"Expected: Stage 1 from mid-March to mid-May (2026: 17 Mar to 18 May).",tests:"Building alphas on the BRAIN platform, alone or in a team of up to four from one university. Research-flavoured.",act:"Optional. Enter if the semester allows.",url:L.iqc},
+{id:"e8",sort:"2027-04-14",pri:"high",conf:"exp",name:"IMC Prosperity 5",org:"IMC Trading",when:"Expected mid-April for about 16 days (2026 started on 14 Apr).",tests:"Python trading bots plus manual trading rounds: market making, options, risk.",act:"Your market-making simulator is the warm-up for this.",url:L.pros},
+{id:"e9",sort:"2027-04-15",pri:"top",conf:"exp",name:"Optiver FutureFocus India, Trading and Research",org:"Optiver, Mumbai",when:"Expected: applications close around mid-April (2026: 17 Apr). Five-day program in Mumbai in June.",tests:"For students two years from graduating, at Indian universities. Selection includes an online assessment. Strong performance can lead to an internship offer. Two streams, Trading and Research or Technology (software and FPGA), and you can apply to only one.",act:"Mental math is the gate here. Watch the programs page from February.",url:L.opt},
+{id:"e10",sort:"2027-07-01",pri:"top",conf:"exp",name:"IIT Madras internship season",org:"Placement and Internship Cell",when:"This year's cycle: portal registration 12 June, tests from the first week of July, Day 1.1 on 22 July. Expect the same pattern in 2027.",tests:"The main event. Up to five resumes, proof for every line, one offer per student. Quant firms test probability, mental math and, at many firms, coding.",act:"Confirm the 2027 dates with the cell in May.",url:L.iitm},
+{id:"e11",sort:"2027-08-15",pri:"low",conf:"exp",name:"IICPC Quantfest",org:"IICPC",when:"Expected August to October (the 2026 finale ended on 20 Oct).",tests:"Probability and quant coding.",act:"Falls after Day 1. Optional.",url:"https://iicpc.com/"},
+{id:"e12",sort:"2026-12-10",pri:"med",conf:"part",name:"Shaastra Verilog Verse",org:"IIT Madras, Shaastra 2027",when:"A listings site shows registration closing on 10 Dec. Format and dates not yet confirmed on the official page.",tests:"A Verilog contest on your own campus, prize pool listed at 50,000 rupees. The Embedded Programming Challenge (register by 8 Dec) sits next to it.",act:"The Embedded Programming Challenge fits your RTOS work. Verilog Verse is optional this year, since RTOS comes before HDLBits.",url:L.sha},
+{id:"e13",sort:"2027-01-18",pri:"low",conf:"yes",name:"Jane Street chip design competition",org:"Jane Street with Tiny Tapeout",when:"Submissions close on 18 Jan 2027. Selected designs announced in early February.",tests:"Design an open-source, reprogrammable protocol emulator chip in Verilog: UART, SPI and I2C to start. Students and professionals, alone or in teams, with teams strongly recommended. About four designs get fabricated. No cash prize and no stated link to interviews.",act:"A reach. Only with a team of three, and only once the flight computer work is handed over.",url:L.jsasic},
+{id:"e14",sort:"2027-05-23",pri:"med",conf:"exp",name:"Goldman Sachs India Hackathon, Quant",org:"Goldman Sachs",when:"Expected: applications from late April to about 10 May, contest in late May (2026: 22 Apr to 10 May, quant day on 23 May).",tests:"Individual, online, 12 hours on HackerRank. In 2026 it was for students graduating in 2027 or 2028, with IIT Madras on the quant list. If the pattern holds, your batch is eligible in 2027. Top performers are fast-tracked to a pre-placement interview.",act:"Enter. A second route to an interview before July.",url:L.gs},
+{id:"e15",sort:"2027-05-31",pri:"high",conf:"exp",name:"NK Securities Research Hackathon",org:"NK Securities Research, Gurugram",when:"Expected late May to early June. The only edition I could confirm ran from 31 May to 8 Jun 2025; I found no 2026 listing.",tests:"Individual, online, about a week: coding, algorithms and quantitative analysis. In 2025 it was open to all B.Tech students, first and second years included. Standout performers were fast-tracked to interviews.",act:"The one open door at NK before campus season. Check their careers page from April.",url:L.nk},
+{id:"e16",sort:"2027-07-05",pri:"med",conf:"exp",name:"AlphaGrep Scholarship test",org:"AlphaGrep",when:"Expected early July (2025: test on 5 Jul). Not confirmed for 2026 or 2027.",tests:"A HackerRank test with coding and quant questions. In 2025: final and pre-final year students in Computer Science, Maths and Computing or Electrical, CGPA 8 or above. Cash awards per campus.",act:"You will be pre-final year by then and EE is on the list. Ask seniors whether it ran at IIT Madras this year.",url:L.ag},
+{id:"e18",sort:"2027-08-17",pri:"low",conf:"exp",name:"QuantStorm",org:"Quant clubs of IIT Guwahati, Delhi and Bombay. Sponsors: Jane Street, Optiver",when:"Expected mid-August (2026: registration closed 16 Aug, online round 17 Aug, final at IIT Bombay on 25 Sep).",tests:"Individual. Trading and market-making games, then a live market simulation for about 40 finalists.",act:"Falls after Day 1. Optional.",url:L.qstorm},
+{id:"e17",sort:"2027-09-21",pri:"med",conf:"exp",name:"NKSR EDGE Scholarship Test",org:"NK Securities Research",when:"Expected September 2027 (2026: 21 Sep, 120 minutes, proctored, on HackerRank).",tests:"For third and fourth year students in CS, IT and circuit branches at seven IITs, registered through the placement cell. Large cash awards, and the top 25 visit the Gurugram office.",act:"After Day 1, but worth sitting. Check that IIT Madras is one of the seven.",url:L.nkedge},
+{id:"e19",sort:"2027-10-24",pri:"low",conf:"exp",name:"National Probability Challenge",org:"Techfest, IIT Bombay",when:"Expected October (2026: online tests on 24 and 31 Oct, team final on 16 Dec).",tests:"Online probability tests, then an on-site team final.",act:"This year's online rounds are over. Optional next October.",url:L.npc}
+];
+
+var TIPS=["Attempt every problem for 20 minutes before you look at anything. That struggle is the training.","Say your reasoning out loud, even alone. An interviewer hears your thinking, not your answer.","A problem you only read does not count. Re-solve it from a blank page tomorrow.","After every contest, upsolve the first problem you could not finish. That is where rating comes from.","No paper for mental math. The real tests do not allow it.","Missed a day? Skip it and do not double up. The plan has already moved things for you.","Write what is given, with units, before you substitute anything.","Seven hours of sleep. Patterns settle overnight.","If today felt slow, good. Slow and correct turns into fast and correct."];
+
+var FORMS=[["Base",0],["Super Saiyan",.06],["Super Saiyan 2",.16],["Super Saiyan God",.30],["Super Saiyan Blue",.46],["Blue Evolved",.64],["Ultra Ego",.85]];
+var AURA=[["#8fd6ff","#d9f2ff","#ffffff"],["#ffb800","#ffe14d","#fff8cc"],["#ff9500","#ffd60a","#eaf6ff"],["#e11d48","#ff6b8b","#ffd9e2"],["#0ea5e9","#67d4ff","#e3f7ff"],["#1d3fd8","#3b82f6","#cfe3ff"],["#7c1fd6","#c04dff","#f3d9ff"]];
+var INSTINCT=["Not yet","Ultra Instinct Sign","Ultra Instinct","Mastered Ultra Instinct"],INSTINCT_AT=[35,50,70];
+var VOICE={v:{name:"Vegeta",mark:"王",tips:["Twenty minutes alone with the problem before you touch a hint. The struggle is the training. The answer is only the receipt.","Say every step out loud. If you cannot say why, you do not know why, and an interviewer will find that out in ten seconds.","You read the solution and felt clever? Worthless. Close it and solve it from a blank page tomorrow. Then it is yours.","The problem that beat you in the contest is the only one worth your evening. Go back and finish it. I do not leave a defeat standing, and neither will you.","No paper for mental math. Fifty on Zetamac is not talent, it is reps. Do the reps.","Nobody at Graviton or NK will ask how motivated you felt in December. They will ask one question and watch you answer it. Train for that moment.","Somewhere another second-year is working through this same list. The only question is which of you does it properly. Decide.","Slow and correct first. Speed comes from clean reps. Fast and sloppy is just losing quickly.","Write down what you are given before you touch a formula. Fighters who rush the opening lose to weaker opponents.","Kakarot never waits until he feels ready. He starts, and ready catches up. Open the first drill now.","Your CGPA got you into the room. It will not answer the market-making question for you. Today's list will.","Pride is not shouting. Pride is doing the boring rep properly when nobody is watching.","Seven hours of sleep. I push harder than anyone alive and I still sleep. Recovery is where the power settles.","Your team put the flight computer in your hands. A rocket does not accept excuses. Build firmware they never have to think about.","You are an electrical engineer who can also price a bet. Almost nobody in that interview queue is both. Make it count."],
+  pre:"Exams first. Win those, then rest, because even a Saiyan heals before the next fight. The chamber opens in {n} day{s}, on {d}. Walk in ready to work.",after:"The chamber is closed. You are stronger than the one who walked in. Whatever is unfinished comes with you into the semester. Finish it.",rest:"Senzu day. Eat, sleep, recover completely. Tomorrow I want all of it.",behind:"{t} is {h} behind what the time left allows. I will not pretend that is fine. Start there, now, and close the gap.",back:"You came back. That is the part that counts. Yesterday is dead and the plan has already moved. First drill, twenty minutes. Go.",moved:"You slipped, so {n} flex drill{s} moved to spring. The core still stands and you can still finish all of it. Prove it.",done:"Every drill ticked. That is what a real day looks like. Rest now, and do it again tomorrow."},
+ w:{name:"Whis",mark:"師",tips:["Twenty minutes on your own first, please. The answer tastes far better when you have earned it.","Do say your reasoning aloud. I can only correct what I can hear.","Reading a solution is like reading a menu. Solve it again tomorrow from a blank page.","After each contest, revisit the problem that got away. That is where the growth is hiding.","No paper for the mental math, if you please. The real tests are not so generous.","Missed a day? No need to double up. The plan has already tidied itself around you.","Write down what you are given, with units, before you substitute. Details are a form of manners.","Lord Beerus sleeps for decades and wakes up strong. You, sadly, need seven hours every night.","Slow and correct today, quick and correct soon. There is no hurry in doing it properly.","Let the answer arrive before the thought finishes. That is all Ultra Instinct is, and Zetamac is where you practise it."],
+  pre:"Exams first, then a proper rest. The chamber opens in {n} day{s}, on {d}. Do enjoy the break.",after:"The chamber has closed. What remains can come along into the semester at a gentler pace.",rest:"A senzu day. Resting well is part of training, so there is nothing to tick.",behind:"{t} has {h} more core work than the time left. Shall we begin there today?",back:"Welcome back. Yesterday is gone and the plan has already moved around it. First drill, twenty minutes.",moved:"You slipped a little, so {n} flex drill{s} moved to spring. The core still fits nicely.",done:"All done for today. Lovely. Do have something nice to eat."}};
+var RIVALS=[["Botamo","Arrays and hashing bounce right off me. Hit harder."],["Frost","Split the search in half, or I find the half you missed."],["Cabba","Trees and recursion. Teach me something, or I pass you."],["Hit","Every path, every node. You have a tenth of a second."],["Goku Black","Solve it once and remember it. Mortals keep solving it twice."],["Kefla","Expectation is one number. Say it faster than both of us."],["Toppo","Bid, ask, and you in the middle. Hold your ground."],["Jiren","Last week. Everything at once. Strength is the only answer."],["Beerus","You extended the arc. I was napping. Now I am awake."]];
+var SIGIL=['<path d="M9 9v22M16 9v22M23 9v22M30 9v22M5 28L35 12"/>','<path d="M20 4l14 16-14 16L6 20zM20 4v32"/>','<path d="M20 36V20M20 20L9 9M20 20l11-11M20 28l-8-6M20 28l8-6"/>','<path d="M7 31l10-9 8 5 9-17"/><circle class="f" cx="7" cy="31" r="3.4"/><circle class="f" cx="17" cy="22" r="3.4"/><circle class="f" cx="25" cy="27" r="3.4"/><circle class="f" cx="34" cy="10" r="3.4"/>','<path d="M6 6h28v28H6zM6 15.3h28M6 24.6h28M15.3 6v28M24.6 6v28"/>','<path d="M7 7h26v26H7z"/><circle class="f" cx="14" cy="14" r="2.8"/><circle class="f" cx="26" cy="14" r="2.8"/><circle class="f" cx="20" cy="20" r="2.8"/><circle class="f" cx="14" cy="26" r="2.8"/><circle class="f" cx="26" cy="26" r="2.8"/>','<path d="M13 32V9M13 9l-6 7M13 9l6 7M27 8v23M27 31l-6-7M27 31l6-7"/>','<path d="M9 28c3-3 3-8 3-12a8 8 0 0116 0c0 4 0 9 3 12zM17 32a3 3 0 006 0"/>','<circle cx="20" cy="20" r="14"/><path d="M20 11v9l6 4"/>'];
+var EVD={e1:"12 Nov",e2:"Nov",e3:"17 Jan",e4:"18 Jan",e5:"Late Jan",e6:"Feb",e7:"Mar",e8:"Apr",e9:"Apr",e10:"July",e11:"Aug on",e12:"10 Dec",e13:"18 Jan",e14:"May",e15:"May–Jun",e16:"July",e17:"Sep",e18:"Aug",e19:"Oct"};
+
+/* ---------- state ---------- */
+function blank(){return {v:2,ts:0,done:{},dtype:{},daily:{},logs:[],ev:{},keep:{},voice:"v",base:"full",start:DEF_START,end:DEF_END}}
+function norm(s){var b=blank();if(!s||typeof s!=="object")return b;for(var k in b){if(s[k]!==undefined&&s[k]!==null)b[k]=s[k]}if(!Array.isArray(b.logs))b.logs=[];if(!VOICE[b.voice])b.voice="v";if(b.base!=="max")b.base="full";
+  if(typeof b.start!=="string"||b.start<"2026-11-20"||b.start>"2026-12-15")b.start=DEF_START;
+  if(typeof b.end!=="string"||b.end<addDays(b.start,21))b.end=DEF_END;return b}
+function pad(n){return n<10?"0"+n:""+n}
+function fmt(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function parse(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}
+function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return fmt(d)}
+function diff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
+function today(){return fmt(new Date(Date.now()-4*3600e3))} /* a training day ends at 4am */
+function nice(s){return parse(s).toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}
+function shortd(s){return parse(s).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}
+var S=blank();
+try{var raw=localStorage.getItem(LS);if(raw)S=norm(JSON.parse(raw))}catch(e){}
+var tab="today";try{tab=localStorage.getItem(LS+".tab")||"today"}catch(e){}
+var EXTRA={dsa:0,prob:0,build:0,trade:0}, OPEN={};
+
+function dayType(d){if(d<S.start||d>S.end)return "off";if(S.dtype[d])return S.dtype[d];return parse(d).getDay()===0?"half":(S.base==="max"?"max":"full")}
+function hrs(h){return (Math.round(h*10)/10)+"h"}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function sum(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i].h;return s}
+function xpOf(q){return Math.round(q.h*10)}
+
+/* ---------- the scheduler ---------- */
+function capacity(t,from){var c=0,d=from<S.start?S.start:from;for(;d<=S.end;d=addDays(d,1))c+=BUD[dayType(d)][t];return c}
+function planTrack(t){
+  var td=today(), after=td>S.end;
+  var qs=Q.filter(function(q){return q.t===t});
+  var und=qs.filter(function(q){return !S.done[q.id]});
+  var doneToday=sum(qs.filter(function(q){return S.done[q.id]===td}));
+  var cap=Math.max(0,capacity(t,td)-Math.min(doneToday,BUD[dayType(td)][t]));
+  var core=und.filter(function(q){return q.p<=2});
+  var H=sum(core), deferred={}, nDef=0, bonus={};
+  if(!after&&H>cap){for(var i=core.length-1;i>=0&&H>cap;i--){var q=core[i];if(q.p===2&&!S.keep[q.id]){deferred[q.id]=1;nDef++;H-=q.h}}}
+  var over=after?0:Math.max(0,H-cap);
+  if(!after&&!nDef&&over===0){var room=cap*0.85-H;und.forEach(function(q){if(q.p===3&&q.h<=room){bonus[q.id]=1;room-=q.h}})}
+  var act=und.filter(function(q){return q.p<=2&&!deferred[q.id]}).concat(und.filter(function(q){return bonus[q.id]}));
+  var pin=act.filter(function(q){return q.due&&diff(td,q.due)<=(q.lead||10)});
+  var active=pin.concat(act.filter(function(q){return pin.indexOf(q)<0}));
+  var fin=null, acc=-Math.min(doneToday,BUD[dayType(td)][t]);
+  if(H<=0)fin=td; else for(var d=td<S.start?S.start:td;d<=S.end;d=addDays(d,1)){acc+=BUD[dayType(d)][t];if(acc>=H){fin=d;break}}
+  return {t:t,qs:qs,und:und,active:active,deferred:deferred,nDef:nDef,bonus:bonus,cap:cap,H:H,over:over,fin:fin,coreLeft:core.length-nDef,
+    doneCore:sum(qs.filter(function(q){return q.p<=2&&S.done[q.id]})),totalH:sum(qs.filter(function(q){return q.p<=2}))};
+}
+function todayList(P){
+  var td=today(), b=BUD[dayType(td)][P.t];
+  var doneT=P.qs.filter(function(q){return S.done[q.id]===td});
+  var used=sum(doneT), next=[], extra=EXTRA[P.t];
+  for(var i=0;i<P.active.length;i++){var q=P.active[i];
+    if(b>0&&used<b){next.push(q);used+=q.h}else if(extra>0){next.push(q);extra--}else break}
+  return {b:b,doneT:doneT,next:next,more:P.active.length>next.length};
+}
+function totals(){
+  var xp=0,core=0,n=0,c=0,k=0;
+  Q.forEach(function(q){if(q.p<=2)core+=xpOf(q);if(S.done[q.id]){xp+=xpOf(q);n+=q.n||0;c+=q.c||0;k+=q.k||0}});
+  for(var d in S.daily){var o=S.daily[d];if(o){if(o.z)xp+=5;if(o.r)xp+=5;if(o.e)xp+=5}}
+  var fi=0,at=0,nextAt=null,nextName=null;
+  for(var i=0;i<FORMS.length;i++){if(xp>=FORMS[i][1]*core){fi=i;at=Math.ceil(FORMS[i][1]*core);if(FORMS[i+1]){nextAt=Math.ceil(FORMS[i+1][1]*core);nextName=FORMS[i+1][0]}else{nextAt=null;nextName=null}}}
+  return {xp:xp,core:core,fi:fi,form:FORMS[fi][0],at:at,nextAt:nextAt,nextName:nextName,n:n,c:c,k:k};
+}
+function instinct(){
+  var z=zscores(),best=z.length?Math.max.apply(null,z.map(function(p){return p[1]})):0,lvl=0;
+  for(var i=0;i<INSTINCT_AT.length;i++)if(best>=INSTINCT_AT[i])lvl=i+1;
+  return {best:best,lvl:lvl,name:INSTINCT[lvl],next:lvl<3?INSTINCT_AT[lvl]:null,nextName:lvl<3?INSTINCT[lvl+1]:null};
+}
+function activeDays(){var m={};for(var id in S.done)m[S.done[id]]=1;for(var d in S.daily){var o=S.daily[d];if(o&&(o.z||o.r||o.e))m[d]=1}return m}
+function trainedDays(){var m=activeDays(),n=0;for(var d in m)if(d>=S.start)n++;return n}
+function missedYesterday(){var td=today(),y=addDays(td,-1);if(y<S.start||td>S.end)return false;var k=dayType(y);if(k==="rest"||k==="off")return false;return !activeDays()[y]}
+function weekCount(){return Math.max(1,Math.ceil((diff(S.start,S.end)+1)/7))}
+function weekOf(d){return Math.max(0,Math.floor(diff(S.start,d)/7))}
+function weekStats(i){
+  var a=addDays(S.start,7*i),b=addDays(a,6);if(b>S.end)b=S.end;var plan=0;
+  for(var d=a;d<=b;d=addDays(d,1)){var k=BUD[dayType(d)];ORDER.forEach(function(t){plan+=k[t]||0})}
+  var hp=Math.round(plan*0.75*2)/2,dmg=0;
+  Q.forEach(function(q){var x=S.done[q.id];if(x&&x>=a&&x<=b)dmg+=q.h});
+  var r=RIVALS[Math.min(i,RIVALS.length-1)];
+  return {i:i,a:a,b:b,hp:hp,dmg:dmg,won:hp>0&&dmg>=hp,name:r[0],line:r[1]};
+}
+function zscores(){var a=[];for(var d in S.daily){var o=S.daily[d];if(o&&o.zs>0)a.push([d,o.zs])}S.logs.forEach(function(g){if(g.z>0)a.push([g.d,g.z])});a.sort(function(x,y){return x[0]<y[0]?-1:x[0]>y[0]?1:y[1]-x[1]});var out=[],last=null;a.forEach(function(p){if(p[0]!==last){out.push(p);last=p[0]}});return out}
+
+/* ---------- pieces ---------- */
+function panel(t,label,sub,body,cls){return '<section class="pw'+(cls?" "+cls:"")+'" data-t="'+t+'"><h2 class="lab"><span>'+esc(label)+'</span></h2><div class="pc"><div class="pin">'+(sub?'<p class="sub">'+sub+"</p>":"")+body+"</div></div></section>"}
+function linksHtml(l){if(!l||!l.length)return "";return '<p class="links">'+l.map(function(x){return '<a href="'+x[1]+'" target="_blank" rel="noopener">'+esc(x[0])+"</a>"}).join("")+"</p>"}
+function dueLabel(dd,due){return dd<0?(-dd)+" day"+(dd===-1?"":"s")+" late · "+shortd(due):dd===0?"Due today":dd===1?"Due tomorrow":"Due "+shortd(due)}
+function rowHtml(o){
+  var open=!!OPEN[o.id];
+  return '<div class="q'+(o.done?" done":"")+'"'+(o.t?' data-t="'+o.t+'"':"")+">"+
+    '<button class="qtick" data-act="tick" data-id="'+o.id+'" aria-pressed="'+!!o.done+'"><span class="chk"></span><span class="qtx"><span class="qt">'+esc(o.title)+"</span>"+(o.meta?'<span class="qm">'+o.meta+"</span>":"")+"</span></button>"+
+    '<button class="qx" data-act="open" data-id="'+o.id+'" aria-expanded="'+open+'" aria-label="Details: '+esc(o.title)+'"></button>'+
+    (o.after?'<div class="qk">'+o.after+"</div>":"")+(open?'<div class="qd">'+o.body+"</div>":"")+"</div>";
+}
+function questHtml(q,opt){
+  opt=opt||{};var done=!!S.done[q.id],tags="";
+  if(q.p===2)tags+='<span class="tag">Flex</span>';
+  if(q.p===3)tags+='<span class="tag good">Limit break</span>';
+  if(opt.deferred)tags+='<span class="tag warn">Moved to spring</span>';
+  if(q.due&&!done){var dd=diff(today(),q.due);if(dd<=(q.lead||10))tags+='<span class="tag '+(dd<=3?"hot":"soon")+'">'+dueLabel(dd,q.due)+"</span>"}
+  return rowHtml({id:q.id,t:q.t,title:q.title,done:done,meta:'<span class="xp">'+hrs(q.h)+" drill · +"+xpOf(q)+" ki</span>"+tags,
+    body:"<p>"+esc(q.d)+"</p>"+linksHtml(q.l),after:opt.deferred&&!done?'<button class="ghost" data-act="keep" data-id="'+q.id+'">Keep it in winter</button>':""});
+}
+function paceTag(P){
+  if(today()>S.end)return "";
+  if(P.coreLeft===0&&!P.nDef)return '<span class="tag good pace">Core complete</span>';
+  if(P.over>0)return '<span class="tag hot pace">'+hrs(P.over)+" over the time left</span>";
+  if(P.nDef)return '<span class="tag warn pace">'+P.nDef+" moved to spring</span>";
+  return "";
+}
+function fill(t,o){return t.replace(/\{(\w+)\}/g,function(m,k){return o[k]!==undefined?o[k]:""})}
+function coach(plans){
+  var td=today(),k=dayType(td),V=VOICE[S.voice]||VOICE.v,msg,sub="";
+  if(td<S.start){var n=diff(td,S.start);msg=fill(V.pre,{n:n,s:n===1?"":"s",d:nice(S.start)});sub="Until then only the deadlines below need you.";}
+  else if(td>S.end){msg=V.after;sub="Ask Claude for the semester version of this plan.";}
+  else if(k==="rest"){msg=V.rest;}
+  else{
+    var bad=plans.filter(function(P){return P.over>0}),moved=plans.filter(function(P){return P.nDef>0}),left=0,any=false;
+    plans.forEach(function(P){var T=todayList(P);left+=T.next.length;if(T.doneT.length)any=true});
+    if(any&&left===0){msg=V.done;}
+    else if(bad.length){msg=fill(V.behind,{t:TRACKS[bad[0].t].name,h:hrs(bad[0].over)});sub="Turning a rest day into a training day, or moving the closing date in Chamber, also fixes it.";}
+    else if(missedYesterday()){msg=V.back;}
+    else if(moved.length){var tot=moved.reduce(function(a,P){return a+P.nDef},0);msg=fill(V.moved,{n:tot,s:tot===1?"":"s"});sub="See which in Chamber. You can pull any of them back.";}
+    else{msg=V.tips[(diff(S.start,td)+V.tips.length*10)%V.tips.length];}
+  }
+  return {msg:msg,sub:sub,who:V.name,mark:V.mark};
+}
+function n1(x){return Math.round(x*10)/10}
+function burstPts(cx,cy,R,r,n){var a=[];for(var i=0;i<n*2;i++){var q=i%2?r:R,an=Math.PI*i/n-Math.PI/2;a.push((cx+Math.cos(an)*q).toFixed(1)+","+(cy+Math.sin(an)*q).toFixed(1))}return a.join(" ")}
+function rivalHtml(){
+  var w=weekStats(weekOf(today())),left=Math.max(0,w.hp-w.dmg),segs="",on=w.hp?Math.ceil(12*left/w.hp):0;
+  for(var i=0;i<12;i++)segs+='<i'+(i<on?"":' class="off"')+"></i>";
+  return '<section class="vs" aria-label="This week\'s opponent">'+
+    '<svg class="mask" viewBox="0 0 80 92" aria-hidden="true"><polygon class="mi" points="'+burstPts(40,46,40,27,11)+'"/><polygon class="my" points="'+burstPts(40,46,32,21,11)+'"/><text class="mv" x="40" y="52" text-anchor="middle">VS</text><text class="mn" x="40" y="64" text-anchor="middle">WK '+(w.i+1)+"</text></svg>"+
+    '<span class="vsl">Week '+(w.i+1)+" opponent · until "+shortd(w.b)+'</span><span class="rname">'+esc(w.name)+"</span>"+
+    '<div class="hp" role="img" aria-label="Opponent health: '+n1(left)+" of "+n1(w.hp)+' hours left">'+segs+'</div><div class="hpn"><span>'+n1(left)+" / "+n1(w.hp)+" HP</span><span>"+(w.dmg>0?"You dealt "+hrs(w.dmg):"“"+esc(w.line)+"”")+"</span></div>"+(w.won?'<span class="stamp">Ring out</span>':"")+"</section>";
+}
+function deadlinesHtml(){
+  var td=today();
+  var list=A.filter(function(a){return !S.done[a.id]&&(!a.from||a.from<=td)&&td<=a.gone&&diff(td,a.due)<=21});
+  var doneT=A.filter(function(a){return S.done[a.id]===td});
+  if(!list.length&&!doneT.length)return "";
+  list.sort(function(x,y){return x.due<y.due?-1:1});
+  var first=list[0],late=list.filter(function(a){return diff(td,a.due)<=1}).length,rows="";
+  doneT.concat(list).forEach(function(a){
+    var done=!!S.done[a.id],dd=diff(td,a.due);
+    rows+=rowHtml({id:a.id,t:"admin",title:a.title,done:done,meta:'<span class="tag '+(dd<=1?"hot":dd<=5?"soon":"")+'">'+dueLabel(dd,a.due)+"</span>",body:"<p>"+esc(a.d)+"</p>"+linksHtml(a.l)});
+  });
+  return '<details class="dl" data-d="dl"'+(OPEN.dl?" open":"")+'><summary><span class="dln'+(late?" hot":"")+'">'+list.length+'</span><span class="dlt">'+(first?esc(first.title):"All clear for now")+"<small>"+(first?dueLabel(diff(td,first.due),first.due)+(list.length>1?" · "+(list.length-1)+" more":""):"Nothing due soon")+'</small></span></summary><div class="dlb">'+rows+"</div></details>";
+}
+function dailiesHtml(){
+  var td=today(),o=S.daily[td]||{};
+  function b(key,t,s){return '<button class="dbtn" data-act="daily" data-id="'+key+'" aria-pressed="'+!!o[key]+'"><b>'+t+"</b><span>"+s+"</span></button>"}
+  return '<div class="grp"><span class="gchip plain"><span>Gravity room, every day</span></span><span class="gsub">25 minutes · +5 ki each</span></div>'+
+    '<div class="dailies">'+b("z","Zetamac ×3","120 s, no paper")+b("r","Re-solve","Yesterday's hardest, from blank")+b("e","Error log","Three lines")+"</div>"+
+    '<div class="zrow"><label for="z-score">Best Zetamac today</label><input id="z-score" type="number" inputmode="numeric" min="0" max="200" value="'+(o.zs||"")+'" data-act="zs"><a href="'+L.zeta+'" target="_blank" rel="noopener">Open Zetamac</a></div>'+instinctLine();
+}
+function instinctLine(){
+  var I=instinct();
+  return '<p class="uiline">'+(I.lvl?"<b>"+esc(I.name)+"</b> reached at "+I.best+". ":"")+(I.next?esc(I.nextName)+" unlocks at a best of "+I.next+".":"Nothing left to unlock here.")+"</p>";
+}
+function sheetHtml(plans,withDailies){
+  var td=today(),k=dayType(td),b="",more=false,hours=0;
+  plans.forEach(function(P){
+    var T=todayList(P);if(!(T.b>0||T.doneT.length||td>S.end))return;
+    var rows=T.doneT.concat(T.next);if(T.more)more=true;hours+=T.b;
+    b+='<div class="grp" data-t="'+P.t+'"><span class="gchip"><span>'+esc(TRACKS[P.t].name)+'</span></span><span class="gsub">'+(T.b?hrs(T.b)+" block · "+TRACKS[P.t].when:"")+"</span>"+paceTag(P)+"</div>";
+    if(!rows.length)b+='<p class="txt muted">'+(P.active.length?"Nothing scheduled here today.":"Everything in this track is done.")+"</p>";
+    rows.forEach(function(q){b+=questHtml(q)});
+  });
+  if(withDailies)b+=dailiesHtml();
+  if(more)b+='<button class="morebtn" data-act="more">+ One more drill per track</button>';
+  return panel("",td>S.end?"What is left":"Today's training",hours?hrs(hours)+" of training · tap a row to tick it":"",b);
+}
+function trialHtml(){
+  var td=today(),last=S.logs.length?S.logs[S.logs.length-1].d:null;
+  var due=parse(td).getDay()===6||!last||diff(last,td)>=7;
+  return panel("","Scouter check",due?"Due this week":"Next on Saturday",
+    '<p class="txt">Once a week, under a clock: best Zetamac of three, eight probability problems in 40 minutes, one virtual contest. These numbers are the truth; ticks only say you showed up.</p>'+
+    '<form class="form" data-form="trial"><label class="field">Zetamac best<input id="tr-z" type="number" inputmode="numeric" min="0" max="200"></label><label class="field">Probability /8<input id="tr-p" type="number" inputmode="numeric" min="0" max="8"></label><label class="field">Contest solved<input id="tr-s" type="number" inputmode="numeric" min="0" max="12"></label><label class="field">Which contest<input id="tr-c" type="text" maxlength="40" placeholder="Div 3 #990"></label><button class="btn" type="submit">Log it</button></form>');
+}
+function viewToday(){
+  var td=today(),k=dayType(td),plans=ORDER.map(planTrack),inArc=td>=S.start&&td<=S.end,c=coach(plans),h="";
+  h+='<section class="top"><div class="coach"><div class="sensei" aria-hidden="true" lang="ja">'+c.mark+'</div><div class="balloon"><span class="who">'+c.who+"</span>"+esc(c.msg)+(c.sub?"<small>"+esc(c.sub)+"</small>":"")+"</div></div>"+deadlinesHtml()+"</section>";
+  if(inArc)h+=rivalHtml();
+  if(inArc&&k!=="rest"){h+=sheetHtml(plans,true)+trialHtml()}
+  else if(td<S.start){
+    h+=panel("","How the chamber works","",'<ul class="list"><li><b>Five tracks, each a queue.</b> Every day you are dealt the next drills from each one, sized to the hours you have.</li><li><b>Tick what you finish.</b> Every finished hour is ki, and an hour of damage to that week\'s opponent.</li><li><b>Ki raises your form,</b> from Base up to Ultra Ego. Speed on Zetamac unlocks Ultra Instinct.</li><li><b>Miss something and the plan moves.</b> It stays at the front tomorrow. Fall behind and flex drills shift to spring so the core still fits.</li><li><b>Senzu days are free.</b> Mark them in Chamber and nothing breaks.</li></ul>');
+  }
+  else if(td>S.end){h+=sheetHtml(plans,false)}
+  return h;
+}
+function viewPlan(){
+  var td=today(),h="",cal="",head="",from=td<S.start?S.start:td;
+  for(var i=0,d=from;i<14&&d<=S.end;i++,d=addDays(d,1)){var k=dayType(d),dt=parse(d);
+    if(i<7)head+="<span>"+dt.toLocaleDateString("en-IN",{weekday:"short"})+"</span>";
+    cal+='<button class="dchip'+(d===td?" today":"")+'" data-act="cycle" data-id="'+d+'" data-k="'+k+'" aria-label="'+nice(d)+": "+k+'"><b>'+dt.getDate()+"</b>"+(CHIP[k]||"")+"</button>"}
+  function step(label,key,val){return '<div class="step">'+label+'<div class="stepc"><button data-act="step" data-id="'+key+':-1" aria-label="'+label+': one day earlier">−</button><b>'+shortd(val)+'</b><button data-act="step" data-id="'+key+':1" aria-label="'+label+': one day later">+</button></div></div>'}
+  h+=panel("","Hyperbolic Time Chamber","Next two weeks · tap a day to change its load",
+    '<div class="calh">'+head+'</div><div class="cal">'+cal+'</div><p class="txt muted">Half power is 4 hours, a warm-up is 2. Mark trips home as senzu days (rest) now and the plan rebalances today.</p>'+
+    '<div class="glab">Plain days are</div><div class="voices">'+[["full","Full power","8.5h: DSA 3, probability 2.5"],["max","Max power","10h: DSA 4, probability 3"]].map(function(o){return '<button class="dbtn" data-act="base" data-id="'+o[0]+'" aria-pressed="'+(S.base===o[0])+'"><b>'+o[1]+"</b><span>"+o[2]+"</span></button>"}).join("")+"</div>"+
+    '<div class="steps">'+step("Chamber opens","start",S.start)+step("Chamber closes","end",S.end)+"</div>");
+  ORDER.forEach(function(t){
+    var P=planTrack(t),pct=P.totalH?Math.min(100,Math.round(100*P.doneCore/P.totalH)):0,b="";
+    b+='<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'+paceTag(P);
+    var up=P.active,def=P.und.filter(function(q){return P.deferred[q.id]}),locked=P.und.filter(function(q){return q.p===3&&!P.bonus[q.id]}),done=P.qs.filter(function(q){return S.done[q.id]});
+    if(up.length){b+='<div class="glab">Up next, in order</div>';up.forEach(function(q){b+=questHtml(q)})}
+    if(def.length){b+='<div class="glab">Moved to spring because time is short</div>';def.forEach(function(q){b+=questHtml(q,{deferred:true})})}
+    if(locked.length){b+='<div class="glab">Limit breaks, unlocked when you are ahead</div>';locked.forEach(function(q){b+=questHtml(q)})}
+    if(done.length){b+='<details class="donebox" data-d="done-'+t+'"'+(OPEN["done-"+t]?" open":"")+"><summary>Done ("+done.length+")</summary>";done.forEach(function(q){b+=questHtml(q)});b+="</details>"}
+    h+=panel(t,TRACKS[t].name,Math.round(P.doneCore)+"h done · "+Math.round(P.H)+"h to go",b);
+  });
+  return h;
+}
+function viewEvents(){
+  var PL={top:"Top priority",high:"High",med:"Benchmark",low:"Optional"},STL={reg:"Registered",done:"Done",skip:"Skipping"},b="";
+  b+='<p class="txt">Your first real quant tests come well before the institute\'s July ones. Yellow dates need action from you.</p>';
+  EVENTS.slice().sort(function(x,y){return x.sort<y.sort?-1:x.sort>y.sort?1:0}).forEach(function(e){
+    var st=S.ev[e.id]||"todo",go=e.pri==="top"||e.pri==="high",open=!!OPEN["ev-"+e.id];
+    b+='<div class="ev"><div class="evm"><div class="evtop"><span class="evd'+(go?" go":"")+'">'+esc(EVD[e.id]||"")+'</span><span class="tag">'+PL[e.pri]+"</span>"+(st!=="todo"?'<span class="tag good">'+STL[st]+"</span>":"")+"</div><h3>"+esc(e.name)+'</h3><p class="do">'+esc(e.act)+"</p></div>"+
+      '<button class="qx" data-act="open" data-id="ev-'+e.id+'" aria-expanded="'+open+'" aria-label="More about '+esc(e.name)+'"></button>'+
+      (open?'<div class="evx"><p class="evw">'+esc(e.when)+"</p><p>"+esc(e.org)+". "+esc(e.tests)+"</p>"+
+      '<div class="evf"><select id="ev-'+e.id+'" data-act="ev" data-id="'+e.id+'" aria-label="My status for '+esc(e.name)+'">'+[["todo","Not yet"],["reg","Registered"],["done","Done"],["skip","Skipping"]].map(function(o){return '<option value="'+o[0]+'"'+(st===o[0]?" selected":"")+">"+o[1]+"</option>"}).join("")+'</select><a href="'+e.url+'" target="_blank" rel="noopener">Official page</a></div></div>':"")+"</div>";
+  });
+  b+='<div class="ev"><div class="evm"><h3>Not for you</h3><p class="txt muted">Jane Street\'s first-year program. The US and European campus trading competitions. Tower\'s Limestone Data Challenge (IIT Bombay and MIT only). Inter IIT Tech Meet this December. D. E. Shaw\'s fellowships, which are for students in the US. The HK, Australia and India quant hackathon, which ended on 4 Nov. Finance theory courses and certificates.</p></div></div>';
+  return panel("","Tournament of Power","Real events · checked 11 Nov 2026",b)+firmsHtml();
+}
+function firmsHtml(){
+  function f(name,url,doors,test){return '<div class="ev"><div class="evm"><h3>'+(url?'<a href="'+url+'" target="_blank" rel="noopener">'+esc(name)+"</a>":esc(name))+'</h3><p class="do">'+esc(doors)+"</p>"+(test?'<p class="txt muted">'+esc(test)+"</p>":"")+"</div></div>"}
+  return panel("","Other universes","The firms, and every door I could find into each · checked 11 Nov 2026",
+    '<p class="txt">Most seats at these firms are filled through the institute\'s July tests. These are the routes that exist outside it. Where I found nothing, it says so.</p>'+
+    f("NK Securities Research",L.nk,"Hackathon, expected late May to June, open to second years in 2025, with interviews for standout entries. EDGE Scholarship Test each September for third and fourth years.","Reported campus test: eight or nine questions on probability, expected value, operating systems and networking, plus two contest-style coding problems, leaning on C++. Then two technical rounds with Brainstellar-style puzzles.")+
+    f("Graviton Research Capital",L.grav,"No student competition found. It posts intern roles on its own careers page: quant researcher, and ultra-low-latency software.","The low-latency intern posting for the batch above yours asked for CS, Electrical or Maths, CGPA 8.5 or above, modern C++, operating systems and computer architecture.")+
+    f("D. E. Shaw India",L.desi,"No open door. Its site says internships are filled only through campus placement offices.","")+
+    f("AlphaGrep",L.ag,"Scholarship test, expected early July. In 2025 Electrical was eligible with CGPA 8 or above.","Coding and quant questions on HackerRank. It also hires FPGA engineers.")+
+    f("Quadeye","","Nothing public found. Campus only, as far as I can tell.","")+
+    f("Tower Research","","Sponsors IICPC Quantfest. Its Limestone Data Challenge is limited to IIT Bombay and MIT.","")+
+    f("IMC",L.imc,"Launchpad India: two days in Mumbai in May, CGPA 8 or above, standout participants fast-tracked to internship interviews.","IMC has also listed an FPGA intern role for IIT Madras; I could see the title but not open the page.")+
+    f("Optiver",L.opt,"FutureFocus India: five days in Mumbai in June, for students two years from graduating.","Two streams, Trading and Research or Technology (software and FPGA). You can apply to one.")+
+    f("Jane Street",L.jsasic,"Sponsors ISTC, Quantile and QuantStorm, so those results are seen by its recruiters. Runs the chip design competition.","")+
+    f("Goldman Sachs",L.gs,"India Hackathon, quant day in late May, with a pre-placement interview for top performers.",""));
+}
+function chartHtml(){
+  var z=zscores();if(z.length<2)return '<p class="txt muted">Log your Zetamac score on two different days and the trend appears here. Target: 50 by the end of the arc, 70 by June.</p>';
+  var W=320,H=130,l=30,r=8,t=10,b=22,max=Math.max(80,Math.max.apply(null,z.map(function(p){return p[1]}))+10),d0=z[0][0],span=Math.max(1,diff(d0,z[z.length-1][0]));
+  function X(d){return l+(W-l-r)*diff(d0,d)/span}function Y(v){return t+(H-t-b)*(1-v/max)}
+  var pts=z.map(function(p){return X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)}).join(" "),lp=z[z.length-1];
+  return '<svg viewBox="0 0 '+W+" "+H+'" class="chart" role="img" aria-label="Zetamac score over time" style="width:100%;height:auto;max-width:560px"><rect x="0" y="0" width="'+W+'" height="'+H+'" fill="none"/>'+
+    [0,25,50,75].filter(function(v){return v<=max}).map(function(v){return '<line x1="'+l+'" x2="'+(W-r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" style="stroke:var(--muted)" stroke-width="'+(v===50?2:1)+'" stroke-dasharray="'+(v===50?"6 4":"2 4")+'"/><text x="'+(l-5)+'" y="'+(Y(v)+3)+'" text-anchor="end">'+v+"</text>"}).join("")+
+    '<polyline points="'+pts+'" fill="none" style="stroke:var(--ink)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/><polyline points="'+pts+'" fill="none" style="stroke:var(--orange)" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+X(lp[0])+'" cy="'+Y(lp[1])+'" r="5" style="fill:var(--yellow);stroke:var(--ink)" stroke-width="2.5"/>'+
+    '<text x="'+l+'" y="'+(H-6)+'">'+shortd(d0)+'</text><text x="'+(W-r)+'" y="'+(H-6)+'" text-anchor="end">'+shortd(lp[0])+'</text><text x="'+(l+4)+'" y="'+(Y(50)-4)+'">target 50</text></svg>';
+}
+function viewStats(){
+  var T=totals(),z=zscores(),best=z.length?Math.max.apply(null,z.map(function(p){return p[1]})):0,td=today(),h="",wk="",N=weekCount(),cur=td<S.start?-1:weekOf(td),nd=trainedDays();
+  for(var i=0;i<N;i++){var w=weekStats(i),c=i>cur||td<S.start?"next":i===cur&&td<=S.end?(w.won?"won":"now"):(w.won?"won":"lost");wk+='<div class="wk '+c+'" title="'+esc(w.name)+'"><b>'+(i+1)+"</b>"+(c==="won"?"KO":c==="now"?"Now":c==="lost"?"Fled":"Soon")+"</div>"}
+  h+=panel("","Tournament bracket","One opponent a week",'<div class="weeks">'+wk+'</div><div class="big"><div><b>'+T.xp+"</b><span>Ki · "+esc(T.form)+"</span></div><div><b>"+nd+"</b><span>"+(nd===1?"Day":"Days")+" trained</span></div><div><b>"+(best||"–")+"</b><span>Best Zetamac</span></div></div>");
+  h+=panel("","Forms","Earned with ki from drills and the gravity room",'<ol class="forms">'+FORMS.map(function(f,i){
+      var need=Math.ceil(f[1]*T.core),st=i<T.fi?"got":i===T.fi?"cur":"";
+      return '<li class="'+st+'"><i style="background:'+AURA[i][0]+'"></i><b>'+esc(f[0])+"</b><span>"+(i===T.fi?"You are here":i<T.fi?"Reached":need+" ki")+"</span></li>"}).join("")+"</ol>"+
+    '<p class="uiline">Ultra Instinct is separate. It comes from speed: a Zetamac best of '+INSTINCT_AT.join(", ")+" for Sign, Ultra Instinct and Mastered.</p>");
+  var pp=planTrack("prob"),ph=planTrack("hw"),nb=Q.filter(function(q){return q.t==="build"&&S.done[q.id]}).length;
+  h+=panel("","Before the chamber closes","",'<div class="scroll"><table><tr><th>Measure</th><th>Now</th><th>Target</th></tr>'+
+    "<tr><td>NeetCode problems</td><td class='num'>"+T.n+"</td><td>about 85</td></tr>"+
+    "<tr><td>CSES problems</td><td class='num'>"+T.c+"</td><td>about 40</td></tr>"+
+    "<tr><td>Timed contests</td><td class='num'>"+T.k+"</td><td>7 or more</td></tr>"+
+    "<tr><td>Zetamac best</td><td class='num'>"+(best||"–")+"</td><td>50</td></tr>"+
+    "<tr><td>Instinct</td><td>"+esc(instinct().name)+"</td><td>Ultra Instinct, at a Zetamac best of 50</td></tr>"+
+    "<tr><td>Probability core</td><td class='num'>"+Math.round(100*pp.doneCore/Math.max(1,pp.totalH))+"%</td><td>Green Book 2, 4, 5.1 to 5.3 · Brainstellar Easy and Medium · all of Mosteller</td></tr>"+
+    "<tr><td>Hardware core</td><td class='num'>"+Math.round(100*ph.doneCore/Math.max(1,ph.totalH))+"%</td><td>Flight computer RTOS handed over with a timing table · HDLBits through counters</td></tr>"+
+    "<tr><td>Build drills</td><td class='num'>"+nb+"</td><td>Market-making simulator on GitHub · a working pokerbot</td></tr></table></div>");
+  if(z.length>=2)h+=panel("trade","Mental math","Zetamac best per day",chartHtml());
+  if(S.logs.length){var tr='<div class="scroll"><table><tr><th>Date</th><th>Zetamac</th><th>Prob.</th><th>Contest</th><th></th></tr>';S.logs.forEach(function(g,i){tr+="<tr><td>"+shortd(g.d)+"</td><td class='num'>"+(g.z||"–")+"</td><td class='num'>"+(g.p!=null?g.p+"/8":"–")+"</td><td>"+(g.s!=null?g.s+" solved":"–")+(g.c?" · "+esc(g.c):"")+'</td><td><button class="ghost" data-act="dellog" data-id="'+i+'">Delete</button></td></tr>'});h+=panel("","Scouter readings","",tr+"</table></div>")}
+  return h;
+}
+function viewLibrary(){
+  function li(name,url,what){return "<li>"+(url?'<a href="'+url+'" target="_blank" rel="noopener">'+esc(name)+"</a>":"<b>"+esc(name)+"</b>")+". "+esc(what)+"</li>"}
+  return syncPanel()+panel("","Your trainer","Same plan, different attitude",'<div class="voices">'+["v","w"].map(function(k){return '<button class="dbtn" data-act="voice" data-id="'+k+'" aria-pressed="'+(S.voice===k)+'"><b>'+VOICE[k].name+"</b><span>"+(k==="v"?"Direct, proud, no excuses":"Calm, precise, a little teasing")+"</span></button>"}).join("")+"</div>")+
+    panel("","Chamber rules","",'<ol class="list"><li>Twenty minutes of your own attempt before any hint, video or AI. Re-solve from blank the next day.</li><li>Think aloud in every session.</li><li>Upsolve after every contest.</li><li>Mental math with no paper.</li><li>Friday evening is off. Any day can be a senzu day; mark it and the plan adjusts.</li><li>Seven hours of sleep.</li><li>No new tracks. Anything new replaces something.</li></ol>')+
+    panel("prob","Probability and puzzles","",'<ul class="list">'+
+    li("Blitzstein and Hwang, Introduction to Probability",L.s110,"You are through chapter 10. Chapter 11 is next; chapter 12 is not needed.")+
+    li("Xinfeng Zhou, A Practical Guide to Quantitative Finance Interviews","","The Green Book. Chapters 2, 4 and 5.1 to 5.3. Skip stochastic calculus and the finance chapter.")+
+    li("Brainstellar",L.bs,"Easy, then Medium on a timer.")+li("Mosteller, Fifty Challenging Problems in Probability","","All fifty.")+
+    li("PuzzledQuant",L.pq,"Free timed practice.")+li("QuantGuide",L.qg,"Firm-tagged questions; the free tier is enough for now.")+li("Jane Street puzzle archive",L.jsp,"Stretch material once you are ahead.")+"</ul>")+
+    panel("dsa","DSA and contests","",'<ul class="list">'+
+    li("NeetCode 150",L.nc,"The pattern list. Videos are in Python; translating to C++ is part of the practice.")+li("USACO Guide",L.usaco,"Free lessons, Silver then Gold. A paid course can replace this and nothing else changes.")+
+    li("CSES Problem Set",L.cses,"Contest-style problems by topic.")+li("AtCoder Educational DP Contest",L.atdp,"You do A to M.")+li("Codeforces",L.cf,"Virtual contests first, then live rounds.")+li("Competitive Programmer's Handbook",L.cph,"Free PDF, for looking things up.")+"</ul>")+
+    panel("trade","Trading skills","",'<ul class="list">'+
+    li("Zetamac",L.zeta,"Daily. Default settings, 120 seconds.")+li("Jane Street, Probability and Markets",L.jsg,"The best short introduction to market making.")+li("Figgie",L.fig,"Jane Street's trading card game.")+li("TraderMath",L.tm,"Practice versions of the arithmetic and sequence tests.")+li("Arthur Benjamin, Secrets of Mental Math","","Chapters 1 to 3.")+"</ul>")+
+    panel("hw","Hardware","",'<ul class="list">'+
+    li("Introduction to RTOS, Shawn Hymel for Digi-Key",L.rtos,"Twelve short videos on FreeRTOS with exercises. Runs on the ESP32 you already own.")+li("Mastering the FreeRTOS Real Time Kernel",L.frbook,"The free official book. Look things up here; do not read it cover to cover.")+
+    li("Getting started with STM32: FreeRTOS, Digi-Key",L.stmrtos,"Setting up FreeRTOS in CubeIDE, step by step.")+li("Memfault Interrupt: watchdogs",L.wdog,"How to build a watchdog that actually catches a stuck task.")+li("Memfault Interrupt: debugging a HardFault",L.hfault,"What to record when the chip faults, and how to read it.")+li("FreeRTOS: stack overflow checking",L.frstack,"The two detection methods and the hook.")+li("HDLBits",L.hdl,"Verilog problems checked in the browser. Through counters this winter; state machines follow if time allows, or in the semester.")+li("Palnitkar, Verilog HDL","","Your course text. Reference only.")+li("nandland, UART",L.uart,"A clear reference for the project, to read after your own version works.")+li("Tiny Tapeout template",L.tt,"Only if you enter the Jane Street chip competition.")+'</ul><p class="txt muted">RTOS comes first because your team is waiting on it, and the fourteen drills are built to make it solid, not just running. HDLBits follows, and whatever does not fit moves to the semester. None of this helps a trading seat; it is your Abhyuday commitment plus a second door into FPGA and low-latency internships.</p>')+
+    panel("build","Build","",'<ul class="list">'+
+    li("Python Data Science Handbook",L.pdsh,"Free online. Chapters 2 and 3.")+li("IIT Pokerbots on GitHub",L.iitpb,"Last year's engine and skeleton bots.")+li("MIT Pokerbots on GitHub",L.mitpb,"Poker math and bot design.")+li("IMC Prosperity",L.pros,"The April competition your simulator prepares you for.")+'</ul><p class="txt muted">One project is enough for trading roles, and the simulator is that one. Results at ISTC, Quantile and Prosperity do the rest. The flight computer firmware is your strongest hardware project; a UART in Verilog comes after it.</p>');
+}
+
+/* ---------- aura: a cel-shaded flame, animated on twos ---------- */
+var auraCv=document.getElementById("aura"),auraCx=auraCv.getContext("2d"),auraRank=0,auraSilver=false,auraInk="#15102e";
+function sizeAura(){var r=auraCv.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);auraCv.width=Math.round(r.width*dpr);auraCv.height=Math.round(r.height*dpr)}
+function drawAura(f){
+  var W=auraCv.width,H=auraCv.height,c=auraCx,cols=AURA[auraRank]||AURA[0],cx=W/2,base=H*0.93,R=W*0.47;
+  c.clearRect(0,0,W,H);
+  var layers=auraSilver?[[1,"#eef1f6"],[0.86,cols[0]],[0.66,cols[1]],[0.44,cols[2]]]:[[1,cols[0]],[0.76,cols[1]],[0.5,cols[2]]];
+  layers.forEach(function(L2,li){var s=L2[0];
+    c.beginPath();var N=26;
+    for(var i=0;i<=N;i++){
+      var u=i/N,ang=Math.PI*(1-u),spike=(i%2?1:0.72)+0.16*Math.sin(i*1.9+f*1.7+li*2.1)+0.12*Math.sin(i*4.3-f*2.3+li);
+      var tall=Math.pow(Math.sin(ang),0.8)*H*0.86*s*spike,x=cx+Math.cos(ang)*R*s*(0.86+0.14*spike),y=base-tall;
+      if(i===0)c.moveTo(x,base);c.lineTo(x,y);
+      if(i===N)c.lineTo(x,base);
+    }
+    c.closePath();c.fillStyle=L2[1];c.fill();
+    if(li===0){c.lineWidth=Math.max(3,W/44);c.strokeStyle=auraInk;c.lineJoin="miter";c.stroke()}
+  });
+}
+var auraFrame=0,auraLast=0,reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function auraLoop(ts){if(ts-auraLast>=83){auraLast=ts;auraFrame++;drawAura(auraFrame)}requestAnimationFrame(auraLoop)}
+
+/* ---------- render ---------- */
+function render(){
+  var T=totals(),td=today(),inArc=td>=S.start&&td<=S.end,N=diff(S.start,S.end)+1,n=diff(S.start,td)+1,eb;
+  if(td<S.start){var k=diff(td,S.start);eb="Opens in "+k+" day"+(k===1?"":"s")}else if(inArc)eb="Day "+n+" of "+N+" · Week "+(weekOf(td)+1);else eb="Chamber closed";
+  document.getElementById("eyebrow").textContent=eb;
+  document.getElementById("rank").textContent=T.fi+1;
+  document.getElementById("form").textContent=T.form;
+  document.getElementById("xp").textContent=T.nextAt?T.xp+" / "+T.nextAt+" ki":T.xp+" ki";
+  document.getElementById("powbar").style.width=(T.nextAt?Math.max(0,Math.min(100,Math.round(100*(T.xp-T.at)/Math.max(1,T.nextAt-T.at)))):100)+"%";
+  document.querySelector(".app").classList.toggle("compact",tab!=="today");sizeAura();
+  var off=syncState==="error"?" · offline, will sync":"";
+  document.getElementById("days").textContent=(inArc?"Today":shortd(S.start)+" to "+shortd(S.end))+off;
+  var lb=document.getElementById("load");lb.hidden=!inArc;document.getElementById("loadt").textContent=TLAB[dayType(td)]||"";
+  auraRank=T.fi;auraSilver=instinct().lvl>0;if(auraCv.width)drawAura(auraFrame);
+  var tabs=document.querySelectorAll(".tabs button");for(var i=0;i<tabs.length;i++)tabs[i].setAttribute("aria-selected",tabs[i].dataset.tab===tab);
+  document.getElementById("view").innerHTML=tab==="plan"?viewPlan():tab==="events"?viewEvents():tab==="stats"?viewStats():tab==="library"?viewLibrary():viewToday();
+}
+var toastT=null;
+function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},1600)}
+(function(){var p=[],n=14;for(var i=0;i<n*2;i++){var a=Math.PI*i/n,r=i%2?34:50;p.push((50+r*Math.cos(a)).toFixed(1)+"% "+(50+r*Math.sin(a)).toFixed(1)+"%")}document.getElementById("fx").style.setProperty("--star","polygon("+p.join(",")+")")})();
+function pow(x,y,txt){
+  if(reduce||x==null){toast(txt);return}
+  var fx=document.getElementById("fx"),el=document.createElement("div");el.className="burst";el.textContent=txt;
+  el.style.left=Math.max(70,Math.min(window.innerWidth-70,x))+"px";el.style.top=Math.max(70,y-40)+"px";fx.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},800);
+}
+
+/* ---------- saving and sync ----------
+   Every change is saved on the device first. When Supabase is set up in config.js and you are signed in,
+   the whole state is one row per account. Newer state wins; if another device wrote since this one last
+   synced, the two are merged (ticks from both are kept) before writing. */
+var CFG=window.WA_CONFIG||{}, SB=null, user=null, syncState="local", wt=null, busy=Promise.resolve(), lastPull=0, authMsg="", authBad=false;
+var SEEN=LS+".seen";
+function seen(){try{return +localStorage.getItem(SEEN)||0}catch(e){return 0}}
+function setSeen(t){try{localStorage.setItem(SEEN,String(t))}catch(e){}}
+function cache(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function setSync(st){if(st===syncState)return;syncState=st;render()}
+function save(){S.ts=Date.now();cache();if(user){setSync("saving");clearTimeout(wt);wt=setTimeout(function(){wt=null;queue(push)},700)}render()}
+function queue(fn){busy=busy.then(fn).catch(function(){setSync("error")});return busy}
+function merge(r,l){
+  var o=norm(JSON.parse(JSON.stringify(r)));
+  ["done","dtype","ev","keep"].forEach(function(k){o[k]=Object.assign({},r[k]||{},l[k]||{})});
+  o.daily=JSON.parse(JSON.stringify(r.daily||{}));for(var d in (l.daily||{}))o.daily[d]=Object.assign({},o.daily[d]||{},l.daily[d]);
+  var keys={};o.logs=[];(r.logs||[]).concat(l.logs||[]).forEach(function(g){var k=JSON.stringify(g);if(!keys[k]){keys[k]=1;o.logs.push(g)}});
+  o.logs.sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0});
+  ["voice","base","start","end"].forEach(function(k){o[k]=l[k]});
+  return o;
+}
+function remote(){return SB.from("arc_state").select("state").eq("user_id",user.id).maybeSingle().then(function(res){if(res.error)throw res.error;return res.data?res.data.state:null})}
+function write(st){return SB.from("arc_state").upsert({user_id:user.id,state:st,updated_at:new Date().toISOString()}).then(function(res){if(res.error)throw res.error})}
+function push(){
+  if(!user)return;setSync("saving");
+  return remote().then(function(r){
+    if(r&&(r.ts||0)>seen()&&(r.ts||0)!==(S.ts||0)){S=norm(merge(r,S));S.ts=Date.now();cache()}
+    var body=JSON.parse(JSON.stringify(S));
+    return write(body).then(function(){setSeen(body.ts);lastPull=Date.now();if(!wt)setSync("synced")});
+  });
+}
+function pull(){
+  if(!user)return;setSync(syncState==="synced"?"synced":"saving");
+  return remote().then(function(r){
+    lastPull=Date.now();
+    if(!r){return push()}
+    if((r.ts||0)>(S.ts||0)){
+      if((S.ts||0)>seen()){S=norm(merge(r,S));S.ts=Date.now();cache();render();return push()}
+      S=norm(r);cache();setSeen(r.ts||0);render();setSync("synced");return;
+    }
+    if((S.ts||0)>(r.ts||0))return push();
+    setSeen(r.ts||0);setSync("synced");
+  });
+}
+function initSync(){
+  if(!CFG.url||!CFG.key||!window.supabase){syncState="off";render();return}
+  SB=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"winterarc.auth"}});
+  syncState="signedout";
+  SB.auth.onAuthStateChange(function(evt,session){
+    var was=user&&user.id;user=session?session.user:null;
+    if(!user){setSync("signedout");return}
+    if(user.id!==was){setTimeout(function(){queue(pull)},0)}  /* never call Supabase inside this callback */
+  });
+  SB.auth.getSession().then(function(res){var se=res.data&&res.data.session;if(!se){setSync("signedout");render()}});
+  function wake(){if(!user)return;if(syncState==="error"||(S.ts||0)>seen())queue(push);else if(Date.now()-lastPull>15000)queue(pull)}
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")wake()});
+  window.addEventListener("focus",wake);window.addEventListener("online",wake);
+  setInterval(function(){if(document.visibilityState==="visible")wake()},60000);
+}
+function syncLabel(){
+  return {off:"Not set up",signedout:"Signed out",saving:"Syncing",synced:"Synced",error:"Offline, will sync",local:"On this device"}[syncState]||"";
+}
+function syncDot(){return '<span class="syncdot '+({synced:"ok",saving:"wait",error:"bad"}[syncState]||"off")+'" aria-hidden="true"></span>'}
+function backupCode(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
+function syncPanel(){
+  var b="";
+  if(syncState==="off"){
+    b='<p class="txt">Progress is saved on this device only. To sync between your phone and laptop, add your Supabase details to <b>config.js</b>; the README says how.</p>';
+  }else if(!user){
+    b='<p class="txt">Sign in on each device with the same account and your ticks follow you.</p>'+
+      '<form class="form" data-form="auth"><label class="field">Email<input id="au-e" type="email" autocomplete="username" autocapitalize="off" spellcheck="false" required></label>'+
+      '<label class="field">Password<input id="au-p" type="password" autocomplete="current-password" minlength="8" required></label>'+
+      '<div class="acts"><button class="btn" type="submit" value="in">Sign in</button><button class="btn ghost" type="submit" value="up">Create account</button></div></form>';
+  }else{
+    b='<p class="txt">'+syncDot()+"<b>"+esc(syncLabel())+"</b> · "+esc(user.email||"")+'</p><div class="acts"><button class="btn" data-act="sync-now">Sync now</button><button class="btn ghost" data-act="sync-out">Sign out</button></div>';
+  }
+  if(authMsg)b+='<p class="smsg'+(authBad?" bad":"")+'">'+esc(authMsg)+"</p>";
+  b+='<details class="dl2"><summary class="glab">Backup code</summary><p class="txt muted">Copy a code holding all your progress, or paste one to restore it. Use this to move progress without sync, or before you reset a phone.</p>'+
+     '<div class="acts"><button class="btn ghost" data-act="bk-copy">Copy backup code</button></div>'+
+     '<textarea id="bk-in" placeholder="Paste a backup code here" spellcheck="false" autocapitalize="off"></textarea><div class="acts"><button class="btn ghost" data-act="bk-load">Restore from code</button></div></details>';
+  return panel("","Capsule sync",syncState==="off"?"Saved on this device":"Same progress on every device",b);
+}
+document.addEventListener("click",function(ev){
+  var el=ev.target.closest("[data-act]");if(!el)return;var act=el.dataset.act;
+  if(act==="sync-now"){queue(push).then(function(){toast("Synced")})}
+  else if(act==="sync-out"){if(SB)SB.auth.signOut().then(function(){authMsg="Signed out. Progress stays saved on this device.";authBad=false;render()})}
+  else if(act==="bk-copy"){var c=backupCode();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(c).then(function(){toast("Backup code copied")},function(){prompt("Copy this code",c)})}else prompt("Copy this code",c)}
+  else if(act==="bk-load"){var t=(document.getElementById("bk-in").value||"").trim();if(!t){toast("Paste a code first");return}
+    try{var n=norm(JSON.parse(decodeURIComponent(escape(atob(t)))));if(!confirm("Replace this device's progress with the backup?"))return;S=n;save();toast("Restored")}catch(e){toast("That code did not work")}}
+});
+document.addEventListener("submit",function(ev){
+  var f=ev.target;if(!f.dataset||f.dataset.form!=="auth")return;ev.preventDefault();if(!SB)return;
+  var mode=ev.submitter&&ev.submitter.value==="up"?"up":"in",em=document.getElementById("au-e").value.trim(),pw=document.getElementById("au-p").value;
+  if(!em||pw.length<8){authMsg="Enter your email and a password of at least 8 characters.";authBad=true;render();return}
+  authMsg=mode==="up"?"Creating account…":"Signing in…";authBad=false;render();
+  var p=mode==="up"?SB.auth.signUp({email:em,password:pw}):SB.auth.signInWithPassword({email:em,password:pw});
+  p.then(function(res){
+    if(res.error){authMsg=res.error.message||"That did not work.";authBad=true;render();return}
+    if(mode==="up"&&!res.data.session){authMsg="Account created. Open the confirmation email, tap the link, then come back here and sign in.";authBad=false;render();return}
+    authMsg="";authBad=false;toast("Signed in");render();
+  },function(){authMsg="Could not reach the server. Check your connection.";authBad=true;render()});
+});
+
+/* ---------- events ---------- */
+function find(id){for(var i=0;i<Q.length;i++)if(Q[i].id===id)return Q[i];for(var j=0;j<A.length;j++)if(A[j].id===id)return A[j];return null}
+document.addEventListener("click",function(ev){
+  var tb=ev.target.closest(".tabs button");if(tb){tab=tb.dataset.tab;try{localStorage.setItem(LS+".tab",tab)}catch(e){}render();var v=document.querySelector(".tabs").getBoundingClientRect();if(v.top<=1)window.scrollTo(0,window.scrollY+document.getElementById("view").getBoundingClientRect().top-v.height-8);return}
+  var el=ev.target.closest("[data-act]");if(!el)return;var act=el.dataset.act,id=el.dataset.id,td=today();
+  if(act==="tick"){var q=find(id);if(!q)return;var f0=totals().fi;if(S.done[id]){delete S.done[id]}else{S.done[id]=td;pow(ev.clientX,ev.clientY,q.h?"+"+xpOf(q)+" ki":"Done")}save();var f1=totals();if(f1.fi>f0)toast("Transformation: "+f1.form)}
+  else if(act==="daily"){var g0=totals().fi,o=S.daily[td]||(S.daily[td]={});o[id]=!o[id];if(o[id])pow(ev.clientX,ev.clientY,"+5 ki");save();var g1=totals();if(g1.fi>g0)toast("Transformation: "+g1.form)}
+  else if(act==="type"){S.dtype[td]=id;save()}
+  else if(act==="cycle"){var k=dayType(id);S.dtype[id]=TYPES[(TYPES.indexOf(k)+1)%TYPES.length];save()}
+  else if(act==="more"){ORDER.forEach(function(t){EXTRA[t]++});render()}
+  else if(act==="voice"){S.voice=id;save()}
+  else if(act==="base"){S.base=id;save()}
+  else if(act==="open"){if(OPEN[id])delete OPEN[id];else OPEN[id]=1;render()}
+  else if(act==="load"){var k0=dayType(td);S.dtype[td]=TYPES[(TYPES.indexOf(k0)+1)%TYPES.length];save()}
+  else if(act==="step"){var pr=id.split(":"),nv=addDays(S[pr[0]],+pr[1]),ok=pr[0]==="start"?(nv>="2026-11-20"&&nv<=addDays(S.end,-21)):(nv>=addDays(S.start,21)&&nv<="2027-02-28");if(ok){S[pr[0]]=nv;save()}else toast("That is as far as it goes")}
+  else if(act==="keep"){S.keep[id]=true;save()}
+  else if(act==="dellog"){S.logs.splice(+id,1);save()}
+});
+document.addEventListener("change",function(ev){
+  var el=ev.target;if(!el.dataset||!el.dataset.act)return;var act=el.dataset.act,td=today();
+  if(act==="zs"){var v=Math.max(0,Math.min(200,parseInt(el.value,10)||0));var o=S.daily[td]||(S.daily[td]={});o.zs=v;if(v>0&&!o.z){o.z=true;toast("+5 ki")}save()}
+  else if(act==="ev"){S.ev[el.dataset.id]=el.value;save()}
+  else if(act==="end"){if(el.value&&el.value>=addDays(S.start,21)&&el.value<="2027-02-28"){S.end=el.value;save()}else{toast("Pick a later end date");render()}}
+  else if(act==="start"){if(el.value&&el.value>="2026-11-20"&&el.value<="2026-12-15"&&el.value<=addDays(S.end,-21)){S.start=el.value;save()}else{toast("Pick an earlier start date");render()}}
+});
+document.addEventListener("submit",function(ev){
+  var f=ev.target;if(!f.dataset||f.dataset.form!=="trial")return;ev.preventDefault();
+  function num(id,max){var v=document.getElementById(id).value;if(v==="")return null;v=parseInt(v,10);return isNaN(v)?null:Math.max(0,Math.min(max,v))}
+  var g={d:today(),z:num("tr-z",200),p:num("tr-p",8),s:num("tr-s",12),c:(document.getElementById("tr-c").value||"").slice(0,40)};
+  if(g.z==null&&g.p==null&&g.s==null){toast("Enter at least one number");return}
+  S.logs.push(g);toast("Logged");save();
+});
+document.addEventListener("toggle",function(ev){var d=ev.target;if(d&&d.dataset&&d.dataset.d){if(d.open)OPEN[d.dataset.d]=1;else delete OPEN[d.dataset.d]}},true);
+
+sizeAura();render();
+window.addEventListener("resize",function(){sizeAura();drawAura(auraFrame)});
+if(window.matchMedia){var mq=window.matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",render)}
+if(!reduce)requestAnimationFrame(auraLoop);
+initSync();
+if("serviceWorker" in navigator&&location.protocol!=="file:"){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+})();
+</script>
+</body>
+</html>
