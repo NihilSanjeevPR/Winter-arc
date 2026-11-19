@@ -882,7 +882,7 @@ var auraFrame=0,auraLast=0,reduce=window.matchMedia&&window.matchMedia("(prefers
 var skyCv=document.getElementById("sky"),skyCx=skyCv.getContext("2d"),skyW=0,skyH=0,skyDpr=1,skyDots=null,skyCols={},sparks=[],skyLast=0,skyT=0;
 function skyTheme(){var cs=getComputedStyle(document.documentElement);["sky1","sky2","sky3","spark","lines","dots"].forEach(function(k){skyCols[k]=cs.getPropertyValue("--"+k).trim()});skyDots=null}
 function skySize(){skyDpr=Math.min(1.5,window.devicePixelRatio||1);skyW=Math.round(window.innerWidth*skyDpr);skyH=Math.round(Math.max(window.innerHeight,document.documentElement.clientHeight)*skyDpr);skyCv.width=skyW;skyCv.height=skyH;skyDots=null;
-  var n=Math.round(Math.min(70,Math.max(26,window.innerWidth/22)));sparks=[];for(var i=0;i<n;i++)sparks.push(newSpark(true))}
+  var n=0;sparks=[];  /* rising motes switched off */for(var i=0;i<n;i++)sparks.push(newSpark(true))}
 function newSpark(any){return {x:Math.random(),y:any?Math.random():1.05+Math.random()*.1,v:.02+Math.random()*.05,s:1.5+Math.random()*3.2,w:Math.random()*6.28,k:Math.random()<.18}}
 function hexA(h,a){if(h&&h.indexOf("rgb")===0)return h;if(!h||h[0]!=="#")return "rgba(255,255,255,"+a+")";var n=parseInt(h.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"}
 function buildDots(){var c=document.createElement("canvas");c.width=skyW;c.height=skyH;var x=c.getContext("2d"),g=14*skyDpr,top=skyH*.62;x.fillStyle=skyCols.dots;
