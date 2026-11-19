@@ -31,7 +31,7 @@
   --page:#d6f0ff; --paper:#fffaf0; --paper2:#ffeeb0; --raise:#ffffff; --line:#15102e; --ctl:#15102e; --rule:#e4dbc4; --fg:#15102e; --muted:#4f4a72; --link:#1746d1;
   --ink:#15102e; --onb:#15102e; --white:#ffffff;
   --yellow:#ffd60a; --orange:#ff7a1a; --sky:#27b3ff; --royal:#1746d1; --pink:#ff5fa0; --green:#2fd98a; --violet:#a98bff; --red:#ef3b2d;
-  --dsa:#27b3ff; --prob:#ff5fa0; --build:#2fd98a; --trade:#a98bff; --hw:#c8f03c;
+  --burst:rgba(23,70,209,.10); --sky1:#38b6ff; --sky2:#bfe8ff; --sky3:#eaf7ff; --spark:#ffffff; --lines:rgba(255,255,255,.55); --dots:rgba(23,70,209,.16); --dsa:#27b3ff; --prob:#ff5fa0; --build:#2fd98a; --trade:#a98bff; --hw:#c8f03c;
   --display:"Dela Gothic One","Arial Black",Impact,sans-serif;
   --body:"M PLUS 1p","Hiragino Sans","Segoe UI",system-ui,sans-serif;
   --hud:"Chakra Petch","Arial Narrow","Segoe UI",sans-serif;
@@ -39,14 +39,16 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme: dark;
-    --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
+    --burst:rgba(179,187,255,.07); --sky1:#05061a; --sky2:#140c3f; --sky3:#2a0d4d; --spark:#ffffff; --lines:rgba(255,255,255,.09); --dots:rgba(179,187,255,.10); --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
+  --burst:rgba(179,187,255,.07); --sky1:#05061a; --sky2:#140c3f; --sky3:#2a0d4d; --spark:#ffffff; --lines:rgba(255,255,255,.09); --dots:rgba(179,187,255,.10); --page:#0b0d28; --paper:#171c50; --paper2:#262e7a; --raise:#0f1238; --line:#b3bbff; --ctl:#b3bbff; --rule:#2e3684; --fg:#f4f2ff; --muted:#aab0e6; --link:#a9c4ff;
 }
 *{box-sizing:border-box}
+#sky{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block}
+@supports (height:100lvh){#sky{height:100lvh}}
 body{background:var(--page);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 56px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--page)}
@@ -93,7 +95,7 @@ h1,h2,h3,p{margin:0}
 .compact .power{margin-top:8px}
 
 /* ---------- tabs ---------- */
-.tabs{position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;display:flex;gap:6px;padding:12px 3px 13px;background:var(--page)}
+.tabs{position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;display:flex;gap:6px;padding:12px 3px 13px;background:color-mix(in srgb,var(--page) 78%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .tabs button{flex:1 1 auto;min-width:0;min-height:44px;transform:skewX(-9deg);background:var(--raise);color:var(--fg);border:3px solid var(--line);padding:5px 3px 6px;font-family:var(--hud);font-style:italic;font-weight:700;font-size:13px;text-transform:uppercase}
 .tabs button>span{display:inline-block;transform:skewX(9deg)}
 .tabs button[aria-selected="true"]{background:var(--yellow);color:var(--onb);border-color:var(--ink);box-shadow:0 5px 0 var(--line)}
@@ -276,26 +278,44 @@ svg.chart text{font-family:var(--hud);font-weight:600;font-size:10px;fill:var(--
 .burst::after{inset:7px;background:var(--yellow);z-index:-1}
 @keyframes pow{0%{transform:scale(.3) rotate(-24deg);opacity:0}22%{transform:scale(1.1) rotate(-9deg);opacity:1}72%{transform:scale(1) rotate(-9deg);opacity:1}100%{transform:scale(1.2) rotate(-9deg);opacity:0}}
 #toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%) skewX(-9deg);background:var(--yellow);color:var(--onb);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-family:var(--display);font-size:14px;padding:3px 16px 5px;z-index:31}
-/* Laptop and tablet: wider page, two columns. Today keeps the training list on the right beside the coach and opponent. */
+/* Laptop: the title card keeps its phone shape in a fixed left column, the tabs stack under it as a menu,
+   and the content scrolls on the right. Below 1000px the wrapper disappears and the phone layout is untouched. */
+.side{display:contents}
 @media (min-width:1000px){
-  .app{max-width:1220px}
-  #view{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:24px;align-items:start;grid-auto-flow:row dense}
-  #view>*{grid-column:1;min-width:0}
-  #view[data-tab="today"]>.pw:not(.trial){grid-column:2;grid-row:1 / span 6}
-  #view[data-tab="today"] .vs{margin-inline:0;border:3px solid var(--ink)}
-  #view:not([data-tab="today"]){display:block;columns:2;column-gap:24px}
+  body{padding-block:28px 64px}
+  .app{max-width:1340px;display:grid;grid-template-columns:400px minmax(0,1fr);column-gap:36px;align-items:start}
+  .side{display:flex;flex-direction:column;gap:18px;position:sticky;top:28px}
+  .splash{padding:18px 18px 18px}
+  .spl-l{gap:16px;position:relative;z-index:2}
+  .spl-l h1{font-size:58px;margin-top:10px}
+  .spl-r{width:118px;height:168px}
+  .tabs{position:static;flex-direction:column;gap:12px;padding:0 12px 0 6px;background:none}
+  .tabs button{min-height:54px;font-size:17px;text-align:left;padding:6px 22px 8px;border-width:3px}
+  .tabs button[aria-selected="true"]{box-shadow:6px 6px 0 var(--line);transform:skewX(-9deg) translateX(10px)}
+  #view{min-width:0}
+  #view:not([data-tab="today"]){columns:2;column-gap:24px}
   #view:not([data-tab="today"])>*{break-inside:avoid;display:inline-block;width:100%}
-  #view[data-tab="events"]{columns:auto;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:24px}
+  #view[data-tab="today"]{max-width:760px}
+  #view[data-tab="today"] .vs{margin-inline:0;border:3px solid var(--ink)}
+  #view[data-tab="events"]{columns:auto;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:24px;align-items:start}
   #view[data-tab="events"]>*{display:block}
-  #view[data-tab="events"]>*:nth-child(2){grid-column:2;grid-row:1}
+}
+@media (min-width:1000px) and (max-width:1199px){
+  .app{grid-template-columns:360px minmax(0,1fr);column-gap:24px}
+  .spl-l h1{font-size:50px}
+  .spl-r{width:100px;height:150px}
+  #view:not([data-tab="today"]){columns:1}
+  #view[data-tab="events"]{display:block}
 }
 @media (max-width:340px){.tabs{gap:4px}.tabs button{font-size:10.5px!important;border-width:2px}}
 @media (max-width:380px){.tabs{gap:5px}.tabs button{font-size:11.5px;padding-inline:2px}.spl-r{width:92px;height:118px}.vs{padding-left:100px}}
 </style>
 
+<canvas id="sky" aria-hidden="true"></canvas>
 </head>
 <body>
 <div class="app">
+  <div class="side">
   <div class="splashw"><div class="splashc"><header class="splash">
     <div class="spl-l">
       <p class="eyebrow"><span id="eyebrow">Hyperbolic Time Chamber</span></p>
@@ -318,6 +338,7 @@ svg.chart text{font-family:var(--hud);font-weight:600;font-size:10px;fill:var(--
     <button role="tab" data-tab="stats" aria-selected="false"><span>Power</span></button>
     <button role="tab" data-tab="library" aria-selected="false"><span>Capsule</span></button>
   </nav>
+  </div>
   <main id="view"></main>
 </div>
 <div id="fx" aria-hidden="true"></div>
@@ -837,6 +858,7 @@ function viewLibrary(){
 
 /* ---------- aura: a cel-shaded flame, animated on twos ---------- */
 var auraCv=document.getElementById("aura"),auraCx=auraCv.getContext("2d"),auraRank=0,auraSilver=false,auraInk="#15102e";
+var WIDE=window.matchMedia?window.matchMedia("(min-width:1000px)"):{matches:false};if(WIDE.addEventListener)WIDE.addEventListener("change",function(){render();sizeAura();drawAura(auraFrame)});
 function sizeAura(){var r=auraCv.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);auraCv.width=Math.round(r.width*dpr);auraCv.height=Math.round(r.height*dpr)}
 function drawAura(f){
   var W=auraCv.width,H=auraCv.height,c=auraCx,cols=AURA[auraRank]||AURA[0],cx=W/2,base=H*0.93,R=W*0.47;
@@ -855,6 +877,47 @@ function drawAura(f){
   });
 }
 var auraFrame=0,auraLast=0,reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* ---------- sky: gradient, an energy glow from the title card in the current form's colour,
+   turning speed lines, rising ki sparks, a halftone fade. Original shapes only. ---------- */
+var skyCv=document.getElementById("sky"),skyCx=skyCv.getContext("2d"),skyW=0,skyH=0,skyDpr=1,skyDots=null,skyCols={},sparks=[],skyLast=0,skyT=0;
+function skyTheme(){var cs=getComputedStyle(document.documentElement);["sky1","sky2","sky3","spark","lines","dots"].forEach(function(k){skyCols[k]=cs.getPropertyValue("--"+k).trim()});skyDots=null}
+function skySize(){skyDpr=Math.min(1.5,window.devicePixelRatio||1);skyW=Math.round(window.innerWidth*skyDpr);skyH=Math.round(Math.max(window.innerHeight,document.documentElement.clientHeight)*skyDpr);skyCv.width=skyW;skyCv.height=skyH;skyDots=null;
+  var n=Math.round(Math.min(70,Math.max(26,window.innerWidth/22)));sparks=[];for(var i=0;i<n;i++)sparks.push(newSpark(true))}
+function newSpark(any){return {x:Math.random(),y:any?Math.random():1.05+Math.random()*.1,v:.02+Math.random()*.05,s:1.5+Math.random()*3.2,w:Math.random()*6.28,k:Math.random()<.18}}
+function hexA(h,a){if(!h||h[0]!=="#")return h;var n=parseInt(h.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"}
+function buildDots(){var c=document.createElement("canvas");c.width=skyW;c.height=skyH;var x=c.getContext("2d"),g=14*skyDpr,top=skyH*.62;x.fillStyle=skyCols.dots;
+  for(var y=top;y<skyH+g;y+=g){var f=(y-top)/(skyH-top),r=Math.max(0,f*f*g*.42);if(r<.4)continue;for(var px=((y/g)%2?g/2:0);px<skyW+g;px+=g){x.beginPath();x.arc(px,y,r,0,6.283);x.fill()}}
+  skyDots=c}
+function drawSky(dt){
+  if(!skyW)return;var c=skyCx,W=skyW,H=skyH,cols=AURA[auraRank]||AURA[0];
+  var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,skyCols.sky1);g.addColorStop(.55,skyCols.sky2);g.addColorStop(1,skyCols.sky3);c.fillStyle=g;c.fillRect(0,0,W,H);
+  var el=document.querySelector(".splash"),r=el?el.getBoundingClientRect():{left:0,top:0,width:window.innerWidth,height:200};
+  var cx=(r.left+r.width*.78)*skyDpr,cy=(r.top+r.height*.45)*skyDpr,R=Math.hypot(W,H);
+  /* speed lines */
+  c.save();c.translate(cx,cy);c.rotate(skyT*.015);c.fillStyle=skyCols.lines;var n=64;
+  for(var i=0;i<n;i++){var a=i*6.2832/n,w=(i%3?.012:.024);c.beginPath();c.moveTo(Math.cos(a)*180*skyDpr,Math.sin(a)*180*skyDpr);c.lineTo(Math.cos(a-w)*R,Math.sin(a-w)*R);c.lineTo(Math.cos(a+w)*R,Math.sin(a+w)*R);c.closePath();c.fill()}
+  c.restore();
+  /* energy glow in the form's colour, breathing slowly */
+  var pulse=1+.06*Math.sin(skyT*1.3),gr=c.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*.62*pulse);
+  gr.addColorStop(0,hexA(cols[1],.62));gr.addColorStop(.22,hexA(cols[0],.34));gr.addColorStop(.55,hexA(cols[0],.10));gr.addColorStop(1,hexA(cols[0],0));c.fillStyle=gr;c.fillRect(0,0,W,H);
+  if(auraSilver){var gs=c.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*.35);gs.addColorStop(0,"rgba(238,241,246,.30)");gs.addColorStop(1,"rgba(238,241,246,0)");c.fillStyle=gs;c.fillRect(0,0,W,H)}
+  /* halftone fade along the bottom */
+  if(!skyDots)buildDots();c.drawImage(skyDots,0,0);
+  /* rising ki sparks */
+  for(var k=0;k<sparks.length;k++){var p=sparks[k];p.y-=p.v*dt;p.w+=dt*2;if(p.y<-.05)sparks[k]=p=newSpark(false);
+    var x=(p.x+Math.sin(p.w)*.006)*W,y=p.y*H,s=p.s*skyDpr,al=Math.min(1,(1-p.y)*3)*Math.min(1,p.y*4+.2);
+    c.globalAlpha=.85*al;c.fillStyle=p.k?skyCols.spark:cols[1];
+    c.beginPath();c.moveTo(x,y-s*2.2);c.lineTo(x+s,y);c.lineTo(x,y+s*2.2);c.lineTo(x-s,y);c.closePath();c.fill();
+    c.globalAlpha=.25*al;c.fillRect(x-s*.25,y+s*2.2,s*.5,s*6)}
+  c.globalAlpha=1;
+}
+function skyLoop(ts){var dt=Math.min(.1,(ts-(skyLast||ts))/1000);if(ts-skyLast>=33||!skyLast){skyT+=dt;drawSky(dt);skyLast=ts}if(!document.hidden)requestAnimationFrame(skyLoop);else skyLast=0}
+skyTheme();skySize();
+window.addEventListener("resize",function(){skySize();drawSky(0)});
+window.addEventListener("scroll",function(){if(reduce)drawSky(0)},{passive:true});
+if(window.matchMedia){var mqs=window.matchMedia("(prefers-color-scheme: dark)");if(mqs.addEventListener)mqs.addEventListener("change",function(){skyTheme();drawSky(0)})}
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&!reduce)requestAnimationFrame(skyLoop)});
+
 function auraLoop(ts){if(ts-auraLast>=83){auraLast=ts;auraFrame++;drawAura(auraFrame)}requestAnimationFrame(auraLoop)}
 
 /* ---------- render ---------- */
@@ -866,11 +929,11 @@ function render(){
   document.getElementById("form").textContent=T.form;
   document.getElementById("xp").textContent=T.nextAt?T.xp+" / "+T.nextAt+" ki":T.xp+" ki";
   document.getElementById("powbar").style.width=(T.nextAt?Math.max(0,Math.min(100,Math.round(100*(T.xp-T.at)/Math.max(1,T.nextAt-T.at)))):100)+"%";
-  document.querySelector(".app").classList.toggle("compact",tab!=="today");sizeAura();
+  document.querySelector(".app").classList.toggle("compact",tab!=="today"&&!WIDE.matches);sizeAura();
   var off=syncState==="error"?" · offline, will sync":"";
   document.getElementById("days").textContent=(inArc?"Today":shortd(S.start)+" to "+shortd(S.end))+off;
   var lb=document.getElementById("load");lb.hidden=!inArc;document.getElementById("loadt").textContent=TLAB[dayType(td)]||"";
-  auraRank=T.fi;auraSilver=instinct().lvl>0;if(auraCv.width)drawAura(auraFrame);
+  auraRank=T.fi;auraSilver=instinct().lvl>0;if(auraCv.width)drawAura(auraFrame);if(reduce&&skyW)drawSky(0);
   var tabs=document.querySelectorAll(".tabs button");for(var i=0;i<tabs.length;i++)tabs[i].setAttribute("aria-selected",tabs[i].dataset.tab===tab);
   document.getElementById("view").dataset.tab=tab;document.getElementById("view").innerHTML=tab==="plan"?viewPlan():tab==="events"?viewEvents():tab==="stats"?viewStats():tab==="library"?viewLibrary():viewToday();
 }
@@ -1024,7 +1087,7 @@ document.addEventListener("toggle",function(ev){var d=ev.target;if(d&&d.dataset&
 sizeAura();render();
 window.addEventListener("resize",function(){sizeAura();drawAura(auraFrame)});
 if(window.matchMedia){var mq=window.matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",render)}
-if(!reduce)requestAnimationFrame(auraLoop);
+if(!reduce){requestAnimationFrame(auraLoop);requestAnimationFrame(skyLoop)}else drawSky(0);
 initSync();
 if("serviceWorker" in navigator&&location.protocol!=="file:"){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 })();
