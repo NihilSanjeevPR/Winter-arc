@@ -276,6 +276,19 @@ svg.chart text{font-family:var(--hud);font-weight:600;font-size:10px;fill:var(--
 .burst::after{inset:7px;background:var(--yellow);z-index:-1}
 @keyframes pow{0%{transform:scale(.3) rotate(-24deg);opacity:0}22%{transform:scale(1.1) rotate(-9deg);opacity:1}72%{transform:scale(1) rotate(-9deg);opacity:1}100%{transform:scale(1.2) rotate(-9deg);opacity:0}}
 #toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%) skewX(-9deg);background:var(--yellow);color:var(--onb);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-family:var(--display);font-size:14px;padding:3px 16px 5px;z-index:31}
+/* Laptop and tablet: wider page, two columns. Today keeps the training list on the right beside the coach and opponent. */
+@media (min-width:1000px){
+  .app{max-width:1220px}
+  #view{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:24px;align-items:start;grid-auto-flow:row dense}
+  #view>*{grid-column:1;min-width:0}
+  #view[data-tab="today"]>.pw:not(.trial){grid-column:2;grid-row:1 / span 6}
+  #view[data-tab="today"] .vs{margin-inline:0;border:3px solid var(--ink)}
+  #view:not([data-tab="today"]){display:block;columns:2;column-gap:24px}
+  #view:not([data-tab="today"])>*{break-inside:avoid;display:inline-block;width:100%}
+  #view[data-tab="events"]{columns:auto;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:24px}
+  #view[data-tab="events"]>*{display:block}
+  #view[data-tab="events"]>*:nth-child(2){grid-column:2;grid-row:1}
+}
 @media (max-width:340px){.tabs{gap:4px}.tabs button{font-size:10.5px!important;border-width:2px}}
 @media (max-width:380px){.tabs{gap:5px}.tabs button{font-size:11.5px;padding-inline:2px}.spl-r{width:92px;height:118px}.vs{padding-left:100px}}
 </style>
@@ -706,7 +719,7 @@ function trialHtml(){
   var due=parse(td).getDay()===6||!last||diff(last,td)>=7;
   return panel("","Scouter check",due?"Due this week":"Next on Saturday",
     '<p class="txt">Once a week, under a clock: best Zetamac of three, eight probability problems in 40 minutes, one virtual contest. These numbers are the truth; ticks only say you showed up.</p>'+
-    '<form class="form" data-form="trial"><label class="field">Zetamac best<input id="tr-z" type="number" inputmode="numeric" min="0" max="200"></label><label class="field">Probability /8<input id="tr-p" type="number" inputmode="numeric" min="0" max="8"></label><label class="field">Contest solved<input id="tr-s" type="number" inputmode="numeric" min="0" max="12"></label><label class="field">Which contest<input id="tr-c" type="text" maxlength="40" placeholder="Div 3 #990"></label><button class="btn" type="submit">Log it</button></form>');
+    '<form class="form" data-form="trial"><label class="field">Zetamac best<input id="tr-z" type="number" inputmode="numeric" min="0" max="200"></label><label class="field">Probability /8<input id="tr-p" type="number" inputmode="numeric" min="0" max="8"></label><label class="field">Contest solved<input id="tr-s" type="number" inputmode="numeric" min="0" max="12"></label><label class="field">Which contest<input id="tr-c" type="text" maxlength="40" placeholder="Div 3 #990"></label><button class="btn" type="submit">Log it</button></form>',"trial");
 }
 function viewToday(){
   var td=today(),k=dayType(td),plans=ORDER.map(planTrack),inArc=td>=S.start&&td<=S.end,c=coach(plans),h="";
@@ -859,7 +872,7 @@ function render(){
   var lb=document.getElementById("load");lb.hidden=!inArc;document.getElementById("loadt").textContent=TLAB[dayType(td)]||"";
   auraRank=T.fi;auraSilver=instinct().lvl>0;if(auraCv.width)drawAura(auraFrame);
   var tabs=document.querySelectorAll(".tabs button");for(var i=0;i<tabs.length;i++)tabs[i].setAttribute("aria-selected",tabs[i].dataset.tab===tab);
-  document.getElementById("view").innerHTML=tab==="plan"?viewPlan():tab==="events"?viewEvents():tab==="stats"?viewStats():tab==="library"?viewLibrary():viewToday();
+  document.getElementById("view").dataset.tab=tab;document.getElementById("view").innerHTML=tab==="plan"?viewPlan():tab==="events"?viewEvents():tab==="stats"?viewStats():tab==="library"?viewLibrary():viewToday();
 }
 var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},1600)}
