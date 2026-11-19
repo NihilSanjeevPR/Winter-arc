@@ -1,23 +1,23 @@
 /* Winter Arc offline cache. Bump VERSION whenever a file changes. */
-const VERSION = "wa-2026-11-19.1";
+const VERSION = "wa-2026-11-19.3";
 const FILES = [
   "./",
   "index.html",
   "config.js",
   "manifest.webmanifest",
-  "vendor/supabase-2.117.3.js",
-  "icons/icon-180.png",
-  "icons/icon-192.png",
-  "icons/icon-512.png",
-  "icons/maskable-512.png",
-  "fonts/ChakraPetch-SemiBold.woff2",
-  "fonts/ChakraPetch-SemiBoldItalic.woff2",
-  "fonts/ChakraPetch-BoldItalic.woff2",
-  "fonts/DelaGothicOne-Regular.woff2",
-  "fonts/MPLUS1p-Regular.woff2",
-  "fonts/MPLUS1p-Medium.woff2",
-  "fonts/MPLUS1p-Bold.woff2",
-  "fonts/MPLUS1p-ExtraBold.woff2"
+  "supabase-2.117.3.js",
+  "icon-180.png",
+  "icon-192.png",
+  "icon-512.png",
+  "maskable-512.png",
+  "ChakraPetch-SemiBold.woff2",
+  "ChakraPetch-SemiBoldItalic.woff2",
+  "ChakraPetch-BoldItalic.woff2",
+  "DelaGothicOne-Regular.woff2",
+  "MPLUS1p-Regular.woff2",
+  "MPLUS1p-Medium.woff2",
+  "MPLUS1p-Bold.woff2",
+  "MPLUS1p-ExtraBold.woff2"
 ];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
