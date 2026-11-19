@@ -884,7 +884,7 @@ function skyTheme(){var cs=getComputedStyle(document.documentElement);["sky1","s
 function skySize(){skyDpr=Math.min(1.5,window.devicePixelRatio||1);skyW=Math.round(window.innerWidth*skyDpr);skyH=Math.round(Math.max(window.innerHeight,document.documentElement.clientHeight)*skyDpr);skyCv.width=skyW;skyCv.height=skyH;skyDots=null;
   var n=Math.round(Math.min(70,Math.max(26,window.innerWidth/22)));sparks=[];for(var i=0;i<n;i++)sparks.push(newSpark(true))}
 function newSpark(any){return {x:Math.random(),y:any?Math.random():1.05+Math.random()*.1,v:.02+Math.random()*.05,s:1.5+Math.random()*3.2,w:Math.random()*6.28,k:Math.random()<.18}}
-function hexA(h,a){if(!h||h[0]!=="#")return h;var n=parseInt(h.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"}
+function hexA(h,a){if(h&&h.indexOf("rgb")===0)return h;if(!h||h[0]!=="#")return "rgba(255,255,255,"+a+")";var n=parseInt(h.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"}
 function buildDots(){var c=document.createElement("canvas");c.width=skyW;c.height=skyH;var x=c.getContext("2d"),g=14*skyDpr,top=skyH*.62;x.fillStyle=skyCols.dots;
   for(var y=top;y<skyH+g;y+=g){var f=(y-top)/(skyH-top),r=Math.max(0,f*f*g*.42);if(r<.4)continue;for(var px=((y/g)%2?g/2:0);px<skyW+g;px+=g){x.beginPath();x.arc(px,y,r,0,6.283);x.fill()}}
   skyDots=c}
@@ -906,9 +906,10 @@ function drawSky(dt){
   /* rising ki sparks */
   for(var k=0;k<sparks.length;k++){var p=sparks[k];p.y-=p.v*dt;p.w+=dt*2;if(p.y<-.05)sparks[k]=p=newSpark(false);
     var x=(p.x+Math.sin(p.w)*.006)*W,y=p.y*H,s=p.s*skyDpr,al=Math.min(1,(1-p.y)*3)*Math.min(1,p.y*4+.2);
-    c.globalAlpha=.85*al;c.fillStyle=p.k?skyCols.spark:cols[1];
-    c.beginPath();c.moveTo(x,y-s*2.2);c.lineTo(x+s,y);c.lineTo(x,y+s*2.2);c.lineTo(x-s,y);c.closePath();c.fill();
-    c.globalAlpha=.25*al;c.fillRect(x-s*.25,y+s*2.2,s*.5,s*6)}
+    var col=p.k?skyCols.spark:cols[1],tw=.75+.25*Math.sin(p.w*3);
+    var tg=c.createLinearGradient(x,y,x,y+s*14);tg.addColorStop(0,hexA(col,.35*al));tg.addColorStop(1,hexA(col,0));c.fillStyle=tg;c.fillRect(x-s*.35,y,s*.7,s*14);
+    var hg=c.createRadialGradient(x,y,0,x,y,s*3.2);hg.addColorStop(0,hexA(col,.55*al*tw));hg.addColorStop(1,hexA(col,0));c.fillStyle=hg;c.beginPath();c.arc(x,y,s*3.2,0,6.283);c.fill();
+    c.fillStyle=hexA("#ffffff",.9*al*tw);c.beginPath();c.arc(x,y,s*.55,0,6.283);c.fill()}
   c.globalAlpha=1;
 }
 function skyLoop(ts){var dt=Math.min(.1,(ts-(skyLast||ts))/1000);if(ts-skyLast>=33||!skyLast){skyT+=dt;drawSky(dt);skyLast=ts}if(!document.hidden)requestAnimationFrame(skyLoop);else skyLast=0}
